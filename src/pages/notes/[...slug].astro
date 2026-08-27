@@ -1,0 +1,55 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Prose from '../../components/Prose.astro';
+import { url } from '../../config/site';
+
+export async function getStaticPaths() {
+  const notes = await getCollection('notes');
+  return notes.map((note) => ({
+    params: { slug: note.id },
+    props: { note },
+  }));
+}
+
+const { note } = Astro.props;
+const { Content } = await render(note);
+const { title, description, date, tags } = note.data;
+
+const dateStr = date.toLocaleDateString('zh-CN', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="mx-auto max-w-3xl px-6 py-12 sm:py-16">
+    <a href={url('/notes')} class="text-sm text-[var(--color-muted)] hover:text-[var(--color-accent)]">
+      ← 返回思考
+    </a>
+
+    <div class="mt-6 flex items-center gap-3 text-sm text-[var(--color-muted)]">
+      <time datetime={date.toISOString()}>{dateStr}</time>
+    </div>
+
+    <h1 class="mt-2 text-3xl sm:text-4xl">{title}</h1>
+    <p class="mt-3 text-lg text-[var(--color-muted)]">{description}</p>
+
+    {tags.length > 0 && (
+      <div class="mt-4 flex flex-wrap gap-2">
+        {tags.map((tag) => (
+          <span class="rounded-full bg-[var(--color-accent)]/10 px-2.5 py-0.5 text-xs text-[var(--color-accent)]">
+            {tag}
+          </span>
+        ))}
+      </div>
+    )}
+
+    <div class="mt-10 border-t border-[var(--color-border)] pt-8">
+      <Prose>
+        <Content />
+      </Prose>
+    </div>
+  </article>
+</BaseLayout>

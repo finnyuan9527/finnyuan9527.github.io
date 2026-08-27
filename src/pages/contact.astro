@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import { site } from '../config/site';
+---
+
+<BaseLayout title="联系">
+  <Section title="联系我" subtitle="欢迎就 AI 落地、企业架构或合作进行交流。">
+    <div class="space-y-6">
+      {site.email ? (
+        <div class="rounded-xl border border-[var(--color-border)] bg-white p-6">
+          <h3 class="text-sm font-medium uppercase tracking-wider text-[var(--color-muted)]">邮箱</h3>
+          <a href={`mailto:${site.email}`} class="mt-2 block text-lg text-[var(--color-primary)]">
+            {site.email}
+          </a>
+        </div>
+      ) : (
+        <div class="rounded-xl border border-dashed border-[var(--color-border)] bg-white/50 p-6 text-[var(--color-muted)]">
+          邮箱待补充
+        </div>
+      )}
+
+      <div class="rounded-xl border border-[var(--color-border)] bg-white p-6">
+        <h3 class="text-sm font-medium uppercase tracking-wider text-[var(--color-muted)]">GitHub</h3>
+        <a
+          href={site.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-2 flex items-center gap-2 text-lg text-[var(--color-primary)]"
+        >
+          finnyuan9527 <span class="text-[var(--color-accent)]">↗</span>
+        </a>
+      </div>
+
+      <p class="text-sm text-[var(--color-muted)]">
+        其他联系方式(公众号、社交账号)将陆续补充。
+      </p>
+    </div>
+  </Section>
+</BaseLayout>

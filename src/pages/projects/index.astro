@@ -1,0 +1,84 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { categoryOptions } from '../../config/categories';
+
+const projects = (await getCollection('projects')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+---
+
+<BaseLayout title="项目" description="AI 应用、AI 平台、企业系统与研发提效的真实项目案例。">
+  <section class="border-b border-[var(--color-border)] bg-white">
+    <div class="mx-auto max-w-5xl px-6 py-12 sm:py-16">
+      <h1 class="text-3xl sm:text-4xl">项目案例</h1>
+      <p class="mt-3 max-w-2xl text-[var(--color-muted)]">
+        从 AI 应用落地到平台建设,从企业系统集成到研发提效,用真实项目展示方法与结果。
+      </p>
+    </div>
+  </section>
+
+  <div class="mx-auto max-w-5xl px-6 py-8">
+    <!-- 分类筛选 -->
+    <div class="mb-8 flex flex-wrap gap-2" id="project-filters">
+      {categoryOptions.map((cat, i) => (
+        <button
+          data-category={cat.id}
+          class:list={[
+            'rounded-full border px-4 py-1.5 text-sm transition-colors',
+            i === 0
+              ? 'border-[var(--color-primary)] bg-[var(--color-primary)] text-white'
+              : 'border-[var(--color-border)] text-[var(--color-muted)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)]',
+          ]}
+        >
+          {cat.label}
+        </button>
+      ))}
+    </div>
+
+    <!-- 项目网格 -->
+    <div class="grid gap-4 sm:grid-cols-2" id="project-grid">
+      {projects.map((project) => (
+        <div data-category={project.data.category}>
+          <ProjectCard project={project} />
+        </div>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  function initFilters() {
+    const buttons = document.querySelectorAll('#project-filters button');
+    const items = document.querySelectorAll('#project-grid > [data-category]');
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const category = btn.getAttribute('data-category');
+
+        buttons.forEach((b) => {
+          b.classList.remove('border-[var(--color-primary)]', 'bg-[var(--color-primary)]', 'text-white');
+          b.classList.add('border-[var(--color-border)]', 'text-[var(--color-muted)]');
+        });
+        btn.classList.add('border-[var(--color-primary)]', 'bg-[var(--color-primary)]', 'text-white');
+        btn.classList.remove('border-[var(--color-border)]', 'text-[var(--color-muted)]');
+
+        items.forEach((item) => {
+          const itemCat = item.getAttribute('data-category');
+          if (category === 'all' || itemCat === category) {
+            item.style.display = '';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFilters);
+  } else {
+    initFilters();
+  }
+</script>

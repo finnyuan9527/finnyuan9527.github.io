@@ -1,0 +1,39 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { url } from '../config/site';
+
+interface Props {
+  note: CollectionEntry<'notes'>;
+}
+
+const { note } = Astro.props;
+const { title, description, date, tags } = note.data;
+
+const dateStr = date.toLocaleDateString('zh-CN', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<a
+  href={url(`/notes/${note.id}`)}
+  class="group block rounded-xl border border-[var(--color-border)] bg-white p-6 transition-shadow hover:shadow-md"
+>
+  <div class="flex items-center gap-3 text-sm text-[var(--color-muted)]">
+    <time datetime={date.toISOString()}>{dateStr}</time>
+  </div>
+  <h3 class="mt-2 text-lg text-[var(--color-primary)] group-hover:text-[var(--color-accent)]">
+    {title}
+  </h3>
+  <p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">{description}</p>
+  {tags.length > 0 && (
+    <div class="mt-3 flex flex-wrap gap-2">
+      {tags.map((tag) => (
+        <span class="rounded-full bg-[var(--color-accent)]/10 px-2.5 py-0.5 text-xs text-[var(--color-accent)]">
+          {tag}
+        </span>
+      ))}
+    </div>
+  )}
+</a>

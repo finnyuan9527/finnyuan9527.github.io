@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { categoryLabels } from '../config/categories';
+import { url } from '../config/site';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, tagline, category, featured } = project.data;
+---
+
+<a
+  href={url(`/projects/${project.id}`)}
+  class="group flex flex-col rounded-xl border border-[var(--color-border)] bg-white p-6 transition-shadow hover:shadow-md"
+>
+  <div class="flex items-center justify-between gap-3">
+    <span class="rounded-full bg-[var(--color-accent)]/10 px-3 py-1 text-xs font-medium text-[var(--color-accent)]">
+      {categoryLabels[category]}
+    </span>
+    {featured && (
+      <span class="text-xs text-[var(--color-muted)]">精选</span>
+    )}
+  </div>
+  <h3 class="mt-4 text-lg text-[var(--color-primary)] group-hover:text-[var(--color-accent)]">
+    {title}
+  </h3>
+  <p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">{tagline}</p>
+</a>

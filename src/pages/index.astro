@@ -1,0 +1,145 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import AbilityCard from '../components/AbilityCard.astro';
+import { site, url } from '../config/site';
+import { categoryLabels } from '../config/categories';
+
+// 读取精选项目 - 迭代 2
+const featuredProjects = (await getCollection('projects'))
+  .filter((p) => p.data.featured)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
+
+// 读取最新笔记 - 迭代 3
+const latestNotes = (await getCollection('notes'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 2);
+
+// 三项核心能力 - 素材第三章能力地图
+const abilities = [
+  {
+    title: 'AI 架构与平台',
+    description: '企业级 AI 平台、模型网关、模型接入与路由、权限、成本与稳定性治理,让 AI 从单点试验走向统一平台和规模化使用。',
+    tags: ['模型网关', 'AI 平台治理', '私有化部署'],
+  },
+  {
+    title: 'Agent 与 RAG',
+    description: '智能体、知识库、检索增强、深度研究、文档解析与工作流编排,把模型能力嵌入真实业务任务和知识流程。',
+    tags: ['智能体', 'RAG', '知识库', '工作流编排'],
+  },
+  {
+    title: '企业数字化与工程交付',
+    description: '低代码、主数据、数据治理、系统集成与迁移,拥有从方案评估、架构设计到部署、监控、治理的完整交付能力。',
+    tags: ['低代码', '数据治理', '系统集成', '工程交付'],
+  },
+];
+
+// 个人标语 - 素材 7.4
+const slogans = [
+  '把前沿 AI 带进真实业务',
+  '让 AI 从能力演示走向长期运营',
+  '用工程化方法,把复杂问题变成可运行的系统',
+];
+---
+
+<BaseLayout>
+  <!-- 首屏 - 素材 7.1 短版 -->
+  <section class="border-b border-[var(--color-border)] bg-white">
+    <div class="mx-auto max-w-3xl px-6 py-20 sm:py-28">
+      <p class="text-sm font-medium uppercase tracking-wider text-[var(--color-accent)]">
+        {site.role}
+      </p>
+      <h1 class="mt-4 text-4xl leading-tight sm:text-5xl">
+        我是{site.name},一名长期实践企业数字化与 AI 落地的架构师。
+      </h1>
+      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--color-muted)]">
+        我关注如何把模型、数据、系统和流程连接起来,让 AI 真正进入业务,成为可用、可控、可持续的生产力。
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a
+          href={url('/projects')}
+          class="inline-flex items-center rounded-lg bg-[var(--color-primary)] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[var(--color-primary)]/90"
+        >
+          查看项目
+        </a>
+        <a
+          href={url('/about')}
+          class="inline-flex items-center rounded-lg border border-[var(--color-border)] px-5 py-2.5 text-sm font-medium text-[var(--color-primary)] transition-colors hover:border-[var(--color-primary)]"
+        >
+          关于我
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 个人标语 - 素材 7.4 -->
+  <Section>
+    <div class="flex flex-col gap-4">
+      {slogans.map((s, i) => (
+        <p class="flex items-start gap-3 text-[var(--color-text)]">
+          <span class="mt-1 text-[var(--color-accent)]">—</span>
+          <span class="text-lg">{s}</span>
+        </p>
+      ))}
+    </div>
+  </Section>
+
+  <!-- 三项核心能力 -->
+  <Section title="核心能力" subtitle="从技术跨度到工程交付,关注 AI 进入真实业务的完整链路。">
+    <div class="grid gap-4 sm:grid-cols-3">
+      {abilities.map((a) => (
+        <AbilityCard title={a.title} description={a.description} tags={a.tags} />
+      ))}
+    </div>
+  </Section>
+
+  <!-- 精选项目 - 迭代 2 动态读取 -->
+  <Section title="精选项目" subtitle="AI 应用、AI 平台、企业系统与研发提效的真实案例。">
+    <div class="grid gap-4 sm:grid-cols-2">
+      {featuredProjects.map((project) => (
+        <a
+          href={url(`/projects/${project.id}`)}
+          class="group flex flex-col rounded-xl border border-[var(--color-border)] bg-white p-6 transition-shadow hover:shadow-md"
+        >
+          <span class="w-fit rounded-full bg-[var(--color-accent)]/10 px-3 py-1 text-xs font-medium text-[var(--color-accent)]">
+            {categoryLabels[project.data.category]}
+          </span>
+          <h3 class="mt-4 text-lg text-[var(--color-primary)] group-hover:text-[var(--color-accent)]">
+            {project.data.title}
+          </h3>
+          <p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">{project.data.tagline}</p>
+        </a>
+      ))}
+    </div>
+    <a href={url('/projects')} class="mt-6 inline-block text-sm font-medium text-[var(--color-accent)]">
+      查看全部项目 →
+    </a>
+  </Section>
+
+  <!-- 最新笔记 - 迭代 3 动态读取 -->
+  <Section title="思考与观点" subtitle="关于 AI 边界、流程重构与企业架构的实践笔记。">
+    <div class="space-y-4">
+      {latestNotes.map((note) => (
+        <a
+          href={url(`/notes/${note.id}`)}
+          class="group block rounded-xl border border-[var(--color-border)] bg-white p-6 transition-shadow hover:shadow-md"
+        >
+          <div class="flex items-center gap-3 text-sm text-[var(--color-muted)]">
+            <time datetime={note.data.date.toISOString()}>
+              {note.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </time>
+          </div>
+          <h3 class="mt-2 text-lg text-[var(--color-primary)] group-hover:text-[var(--color-accent)]">
+            {note.data.title}
+          </h3>
+          <p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">{note.data.description}</p>
+        </a>
+      ))}
+    </div>
+    <a href={url('/notes')} class="mt-6 inline-block text-sm font-medium text-[var(--color-accent)]">
+      查看全部笔记 →
+    </a>
+  </Section>
+</BaseLayout>

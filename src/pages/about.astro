@@ -1,0 +1,142 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+
+// 能力地图 - 素材第三章 3.2
+const abilityMap = [
+  {
+    direction: 'AI 架构与平台',
+    detail: '企业级 AI 平台、模型网关、模型接入、路由、权限、成本与稳定性治理',
+    expression: '让 AI 能力从单点试验走向统一平台和规模化使用',
+  },
+  {
+    direction: 'Agent 与 RAG',
+    detail: '智能体、知识库、检索增强、深度研究、文档解析、工作流编排',
+    expression: '把模型能力嵌入真实业务任务和知识流程',
+  },
+  {
+    direction: '企业数字化',
+    detail: '低代码、主数据、OA、钉钉、数据链路、系统集成与迁移',
+    expression: '理解企业复杂系统,并处理跨系统协同问题',
+  },
+  {
+    direction: '工程交付',
+    detail: '方案评审、架构设计、代码开发、测试、上线、监控、运维和故障处理',
+    expression: '拥有从概念到生产环境的完整交付能力',
+  },
+  {
+    direction: '业务协作',
+    detail: '与 HR、财务、业务条线、供应商和技术团队共同推进项目',
+    expression: '把技术语言转译为业务目标、验收标准和可执行计划',
+  },
+  {
+    direction: '技术赋能',
+    detail: '内部培训、技术分享、工具推广和 AI 使用方法总结',
+    expression: '帮助团队从工具使用走向能力建设',
+  },
+];
+
+// 工作方法与价值观 - 素材第五章
+const values = [
+  {
+    title: '从验证开始,而不是从想象开始',
+    body: '在 AI 项目中倾向于先做小规模 POC,再通过 MVP、增量迭代和规模化逐步推进,并为每个阶段设置可量化的验收标准。',
+  },
+  {
+    title: '从技术走到业务现场',
+    body: '不把 AI 描述成孤立的模型能力,而是把它放进数据、系统、流程、权限、成本和组织协作中考察。',
+  },
+  {
+    title: '既追求前沿,也重视边界',
+    body: '认可 AI 在方案文档、会议纪要、编码辅助、内容检索等场景中的价值,同时明确重大决策、关系维护和组织影响力建设不能简单交给 AI。',
+  },
+  {
+    title: '对稳定性和长期运营负责',
+    body: '从系统迁移、故障处理、监控、安全治理到平台成本,关注"上线之后是否能稳定运行",而不止是新技术体验。',
+  },
+];
+
+// 当前关注问题
+const focus = [
+  '企业级 AI 平台的统一治理与规模化运营',
+  'Agent 与工作流编排如何重构企业协作方式',
+  'RAG 与知识库在企业复杂场景中的落地边界',
+  'AI 工具链对研发提效的真实影响与使用边界',
+];
+---
+
+<BaseLayout title="关于我">
+  <!-- 长版自我介绍 - 素材 7.3 -->
+  <section class="border-b border-[var(--color-border)] bg-white">
+    <div class="mx-auto max-w-3xl px-6 py-16 sm:py-20">
+      <h1 class="text-3xl sm:text-4xl">关于我</h1>
+      <p class="mt-3 text-lg text-[var(--color-muted)]">
+        现任复星集团高级研发总监 · 架构师
+      </p>
+      <div class="mt-6 space-y-4 text-base leading-relaxed text-[var(--color-text)]">
+        <p>
+          我是{`袁飞扬`},现任复星集团高级研发总监、架构师,长期从事企业数字化与人工智能落地工作,现聚焦企业级 AI 架构、智能体、知识库与 AI 平台建设。
+        </p>
+        <p>
+          我的职业经历始于互联网应用和平台开发,之后逐步进入企业数字化、低代码、数据治理和复杂系统集成,近几年重点投入 AI 应用、模型平台、智能体和 AI 工作流建设。
+        </p>
+        <p>
+          我更关心技术如何进入真实业务:从方案评估、架构设计、代码开发,到部署、监控、治理和持续迭代,把一个想法变成可用、可控、可复用的系统。
+        </p>
+        <p>
+          对我来说,AI 不只是工具升级,更是流程重构、组织协作和工作方式的重新设计。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 能力地图 - 素材 3.2 -->
+  <Section title="能力地图" subtitle="六个方向,从技术深度到组织协作。">
+    <div class="overflow-x-auto rounded-xl border border-[var(--color-border)] bg-white">
+      <table class="w-full text-left text-sm">
+        <thead class="border-b border-[var(--color-border)] bg-[var(--color-bg)]">
+          <tr>
+            <th class="px-4 py-3 font-medium text-[var(--color-primary)]">能力方向</th>
+            <th class="px-4 py-3 font-medium text-[var(--color-primary)]">具体内容</th>
+            <th class="hidden px-4 py-3 font-medium text-[var(--color-primary)] sm:table-cell">网站表达方向</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-[var(--color-border)]">
+          {abilityMap.map((row) => (
+            <tr>
+              <td class="whitespace-nowrap px-4 py-3 font-medium text-[var(--color-primary)]">
+                {row.direction}
+              </td>
+              <td class="px-4 py-3 text-[var(--color-muted)]">{row.detail}</td>
+              <td class="hidden px-4 py-3 text-[var(--color-muted)] sm:table-cell">{row.expression}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </Section>
+
+  <!-- 工作方法与价值观 - 素材第五章 -->
+  <Section title="工作方法与价值观">
+    <div class="space-y-6">
+      {values.map((v) => (
+        <div class="rounded-xl border border-[var(--color-border)] bg-white p-6">
+          <h3 class="text-lg">{v.title}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">{v.body}</p>
+        </div>
+      ))}
+    </div>
+  </Section>
+
+  <!-- 当前关注问题 -->
+  <Section title="当前关注" subtitle="正在思考和推进的问题。">
+    <ul class="space-y-3">
+      {focus.map((f) => (
+        <li class="flex items-start gap-3 text-[var(--color-text)]">
+          <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-accent)]"></span>
+          <span>{f}</span>
+        </li>
+      ))}
+    </ul>
+  </Section>
+</BaseLayout>

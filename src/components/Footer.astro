@@ -1,0 +1,13 @@
+---
+import { site } from '../config/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-[var(--color-border)]">
+  <div class="mx-auto flex max-w-5xl flex-col items-center justify-between gap-2 px-6 py-6 text-sm text-[var(--color-muted)] sm:flex-row">
+    <p>© {year} {site.name}. {site.role}</p>
+    <a href={site.github} target="_blank" rel="noopener noreferrer" class="hover:text-[var(--color-accent)]">
+      GitHub ↗
+    </a>
+  </div>
+</footer>
