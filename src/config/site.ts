@@ -6,7 +6,7 @@ export const site = {
   tagline: '把前沿 AI 带进真实业务',
   description:
     '长期实践企业数字化与 AI 落地的架构师,关注如何把模型、数据、系统和流程连接起来,让 AI 真正进入业务。',
-  email: '', // TODO: 待补充
+  email: 'finnyuan9527@gmail.com',
   github: 'https://github.com/finnyuan9527',
   nav: [
     { label: '首页', href: '/' },
