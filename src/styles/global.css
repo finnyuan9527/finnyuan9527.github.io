@@ -19,6 +19,10 @@
     scroll-behavior: smooth;
   }
 
+  ::selection {
+    background-color: rgb(20 184 166 / 0.22);
+  }
+
   body {
     background-color: var(--color-bg);
     color: var(--color-text);
@@ -36,10 +40,39 @@
   a {
     color: var(--color-accent);
     text-decoration: none;
-    transition: opacity 0.15s ease;
+    transition: color 0.15s ease;
+  }
+}
+
+@layer utilities {
+  /* 蓝图网格纹理 - 契合架构师人设,径向渐隐不抢内容 */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, rgb(11 42 74 / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(11 42 74 / 0.05) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(ellipse 90% 85% at 50% 0%, black 30%, transparent 78%);
   }
 
-  a:hover {
-    opacity: 0.8;
+  /* 首屏淡入上移动效 */
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-up {
+    animation: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-fade-up {
+      animation: none;
+    }
   }
 }

@@ -8,20 +8,27 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const { title, tagline, category, featured } = project.data;
+const { title, tagline, category } = project.data;
 ---
 
 <a
   href={url(`/projects/${project.id}`)}
-  class="group flex flex-col rounded-xl border border-[var(--color-border)] bg-white p-6 transition-shadow hover:shadow-md"
+  class="group relative flex flex-col overflow-hidden rounded-xl border border-[var(--color-border)] bg-white p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[rgb(11_42_74/0.08)]"
 >
+  <span
+    aria-hidden="true"
+    class="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] transition-transform duration-300 group-hover:scale-x-100"
+  ></span>
   <div class="flex items-center justify-between gap-3">
     <span class="rounded-full bg-[var(--color-accent)]/10 px-3 py-1 text-xs font-medium text-[var(--color-accent)]">
       {categoryLabels[category]}
     </span>
-    {featured && (
-      <span class="text-xs text-[var(--color-muted)]">精选</span>
-    )}
+    <span
+      aria-hidden="true"
+      class="text-lg text-[var(--color-accent)] opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:opacity-100"
+    >
+      ↗
+    </span>
   </div>
   <h3 class="mt-4 text-lg text-[var(--color-primary)] group-hover:text-[var(--color-accent)]">
     {title}

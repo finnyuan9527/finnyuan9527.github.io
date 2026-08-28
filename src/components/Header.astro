@@ -8,10 +8,10 @@ const isActive = (href: string) => {
 };
 ---
 
-<header class="sticky top-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-bg)]/80 backdrop-blur-md">
+<header id="top" class="sticky top-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-bg)]/80 backdrop-blur-md">
   <nav class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-    <a href={url('/')} class="flex items-center gap-2 text-[var(--color-primary)] font-semibold">
-      <span class="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[var(--color-primary)] text-sm font-bold text-[var(--color-accent)]">
+    <a href={url('/')} class="flex items-center gap-2.5 text-[var(--color-primary)] font-semibold">
+      <span class="inline-flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-accent)] text-sm font-bold text-white shadow-sm">
         F
       </span>
       <span class="text-sm">{site.name}</span>
@@ -22,10 +22,10 @@ const isActive = (href: string) => {
           <a
             href={url(item.href)}
             class:list={[
-              'transition-colors',
+              'relative transition-colors after:absolute after:inset-x-0 after:-bottom-1.5 after:h-0.5 after:origin-left after:rounded-full after:bg-[var(--color-accent)] after:transition-transform after:duration-300',
               isActive(item.href)
-                ? 'text-[var(--color-primary)] font-medium'
-                : 'text-[var(--color-muted)] hover:text-[var(--color-primary)]',
+                ? 'font-medium text-[var(--color-primary)] after:scale-x-100'
+                : 'text-[var(--color-muted)] after:scale-x-0 hover:text-[var(--color-primary)] hover:after:scale-x-100',
             ]}
           >
             {item.label}

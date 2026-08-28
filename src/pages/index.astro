@@ -46,18 +46,31 @@ const slogans = [
 
 <BaseLayout>
   <!-- 首屏 - 素材 7.1 短版 -->
-  <section class="border-b border-[var(--color-border)] bg-white">
-    <div class="mx-auto max-w-3xl px-6 py-20 sm:py-28">
-      <p class="text-sm font-medium uppercase tracking-wider text-[var(--color-accent)]">
-        {site.role}
+  <section class="relative overflow-hidden border-b border-[var(--color-border)] bg-white">
+    <div aria-hidden="true" class="bg-grid absolute inset-0"></div>
+    <div class="relative mx-auto max-w-3xl px-6 py-20 sm:py-28">
+      <p class="animate-fade-up inline-flex items-center gap-2.5 rounded-full border border-[var(--color-border)] bg-[var(--color-bg)]/80 px-4 py-1.5 text-xs font-medium text-[var(--color-primary)]">
+        <span class="relative flex h-2 w-2">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--color-accent)] opacity-50"></span>
+          <span class="relative inline-flex h-2 w-2 rounded-full bg-[var(--color-accent)]"></span>
+        </span>
+        现任复星集团 · 高级研发总监 · 架构师
       </p>
-      <h1 class="mt-4 text-4xl leading-tight sm:text-5xl">
-        我是{site.name},一名长期实践企业数字化与 AI 落地的架构师。
+      <h1
+        class="animate-fade-up mt-6 text-4xl leading-tight tracking-tight sm:text-5xl lg:text-6xl"
+        style="animation-delay: 80ms"
+      >
+        我是{site.name},一名长期实践企业数字化与
+        AI
+        落地的<span class="bg-[linear-gradient(to_top,rgb(20_184_166/0.22)_28%,transparent_28%)] px-0.5">架构师</span>。
       </h1>
-      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--color-muted)]">
+      <p
+        class="animate-fade-up mt-6 max-w-2xl text-lg leading-relaxed text-[var(--color-muted)]"
+        style="animation-delay: 160ms"
+      >
         我关注如何把模型、数据、系统和流程连接起来,让 AI 真正进入业务,成为可用、可控、可持续的生产力。
       </p>
-      <div class="mt-8 flex flex-wrap gap-3">
+      <div class="animate-fade-up mt-8 flex flex-wrap gap-3" style="animation-delay: 240ms">
         <a
           href={url('/projects')}
           class="inline-flex items-center rounded-lg bg-[var(--color-primary)] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[var(--color-primary)]/90"
@@ -66,7 +79,7 @@ const slogans = [
         </a>
         <a
           href={url('/about')}
-          class="inline-flex items-center rounded-lg border border-[var(--color-border)] px-5 py-2.5 text-sm font-medium text-[var(--color-primary)] transition-colors hover:border-[var(--color-primary)]"
+          class="inline-flex items-center rounded-lg border border-[var(--color-border)] bg-white px-5 py-2.5 text-sm font-medium text-[var(--color-primary)] transition-colors hover:border-[var(--color-primary)]"
         >
           关于我
         </a>
@@ -101,8 +114,18 @@ const slogans = [
       {featuredProjects.map((project) => (
         <a
           href={url(`/projects/${project.id}`)}
-          class="group flex flex-col rounded-xl border border-[var(--color-border)] bg-white p-6 transition-shadow hover:shadow-md"
+          class="group relative flex flex-col overflow-hidden rounded-xl border border-[var(--color-border)] bg-white p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[rgb(11_42_74/0.08)]"
         >
+          <span
+            aria-hidden="true"
+            class="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] transition-transform duration-300 group-hover:scale-x-100"
+          ></span>
+          <span
+            aria-hidden="true"
+            class="absolute right-5 top-5 text-lg text-[var(--color-accent)] opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:opacity-100"
+          >
+            ↗
+          </span>
           <span class="w-fit rounded-full bg-[var(--color-accent)]/10 px-3 py-1 text-xs font-medium text-[var(--color-accent)]">
             {categoryLabels[project.data.category]}
           </span>
@@ -113,7 +136,7 @@ const slogans = [
         </a>
       ))}
     </div>
-    <a href={url('/projects')} class="mt-6 inline-block text-sm font-medium text-[var(--color-accent)]">
+    <a href={url('/projects')} class="mt-6 inline-block text-sm font-medium text-[var(--color-accent)] hover:underline underline-offset-4">
       查看全部项目 →
     </a>
   </Section>
@@ -124,10 +147,15 @@ const slogans = [
       {latestNotes.map((note) => (
         <a
           href={url(`/notes/${note.id}`)}
-          class="group block rounded-xl border border-[var(--color-border)] bg-white p-6 transition-shadow hover:shadow-md"
+          class="group relative block overflow-hidden rounded-xl border border-[var(--color-border)] bg-white p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[rgb(11_42_74/0.08)]"
         >
-          <div class="flex items-center gap-3 text-sm text-[var(--color-muted)]">
-            <time datetime={note.data.date.toISOString()}>
+          <span
+            aria-hidden="true"
+            class="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] transition-transform duration-300 group-hover:scale-x-100"
+          ></span>
+          <div class="flex items-center gap-2 text-sm text-[var(--color-muted)]">
+            <span class="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]"></span>
+            <time class="tabular-nums" datetime={note.data.date.toISOString()}>
               {note.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
             </time>
           </div>
@@ -138,7 +166,7 @@ const slogans = [
         </a>
       ))}
     </div>
-    <a href={url('/notes')} class="mt-6 inline-block text-sm font-medium text-[var(--color-accent)]">
+    <a href={url('/notes')} class="mt-6 inline-block text-sm font-medium text-[var(--color-accent)] hover:underline underline-offset-4">
       查看全部笔记 →
     </a>
   </Section>
