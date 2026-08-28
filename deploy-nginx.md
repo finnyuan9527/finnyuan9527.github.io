@@ -8,30 +8,19 @@
 
 ```js
 site: 'https://finnyuan9527.github.io',
-base: '/finn-site',
+base: '/',
 ```
 
 Nginx 部署有 **两种模式**,对应不同的配置与构建参数,**二选一**:
 
 | 模式 | 访问地址 | 需要改动 |
 |---|---|---|
-| **A. 根路径**(推荐自有域名/服务器) | `https://your-domain.com/` | 改 `base` 和 `site`(见下) |
-| **B. 子路径** | `https://your-domain.com/finn-site/` | 无需改代码 |
+| **A. 根路径**(推荐,当前配置) | `https://your-domain.com/` | 无需改代码 |
+| **B. 子路径** | `https://your-domain.com/finn-site/` | 把 `base` 改为子路径后重新构建 |
 
 ### 模式 A:根路径部署(推荐)
 
-编辑 [astro.config.mjs](astro.config.mjs):
-
-```js
-export default defineConfig({
-  site: 'https://your-domain.com',   // ← 你的正式域名
-  base: '/',                          // ← 改为根路径
-  integrations: [mdx(), sitemap()],
-  vite: { plugins: [tailwindcss()] },
-});
-```
-
-同时更新 [public/robots.txt](public/robots.txt) 中 Sitemap 地址:
+`base` 已是 `/`,无需改代码。如使用自有域名,只需把 [astro.config.mjs](astro.config.mjs) 的 `site` 改为正式域名,并同步更新 [public/robots.txt](public/robots.txt) 中的 Sitemap 地址:
 
 ```
 Sitemap: https://your-domain.com/sitemap-index.xml
@@ -39,9 +28,9 @@ Sitemap: https://your-domain.com/sitemap-index.xml
 
 ### 模式 B:子路径部署
 
-代码零改动,直接按第三章「子路径 Nginx 配置」托管即可。
+把 [astro.config.mjs](astro.config.mjs) 的 `base` 改为子路径(如 `/finn-site`)后重新构建,再按第三章「子路径 Nginx 配置」托管。
 
-> 注意:`robots.txt` 中 Sitemap 地址仍是 github.io,需一并改为实际域名。
+> 注意:`robots.txt` 中 Sitemap 地址需一并改为实际域名(含子路径)。
 
 ---
 
@@ -67,7 +56,7 @@ rsync -avz --delete dist/ root@your-server:/var/www/finn-site/
 方式二:服务器上拉取仓库后构建
 
 ```bash
-git clone git@github.com:finnyuan9527/finn-site.git && cd finn-site
+git clone git@github.com:finnyuan9527/finnyuan9527.github.io.git && cd finnyuan9527.github.io
 pnpm install && pnpm build
 cp -r dist/* /var/www/finn-site/
 ```
@@ -164,7 +153,7 @@ sudo nginx -t && sudo systemctl reload nginx
 
 ### 模式 B:子路径配置
 
-保持代码 `base: '/finn-site'` 不变,Nginx 用 `alias` 映射:
+先把 `base` 改为对应子路径并重新构建,Nginx 用 `alias` 映射:
 
 ```nginx
 server {
@@ -238,7 +227,7 @@ rsync -avz --delete dist/ root@your-server:/var/www/finn-site/
 
 | 现象 | 原因 | 解决 |
 |---|---|---|
-| 页面能开但样式/JS 全 404 | `base` 配置与实际访问路径不一致 | 根路径部署须 `base: '/'`;子路径部署须 `base: '/finn-site'`,重新 build |
+| 页面能开但样式/JS 全 404 | `base` 配置与实际访问路径不一致 | 根路径部署须 `base: '/'`;子路径部署 `base` 须与访问路径一致,重新 build |
 | 刷新子页面 404 | Nginx 未命中 `$uri/index.html` 规则 | 确认 `try_files $uri $uri/ $uri/index.html =404;` 存在 |
 | 子路径 alias 报 404 | `alias` 结尾少了 `/` | 写成 `alias /var/www/finn-site/dist/;` |
 | 内容更新了但页面没变 | 浏览器缓存 HTML 或 Nginx 缓存 | Ctrl+F5 强刷;确认只有 `/_astro/` 走长缓存 |

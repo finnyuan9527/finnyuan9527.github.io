@@ -7,7 +7,7 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://finnyuan9527.github.io',
-  base: '/finn-site',
+  base: '/',
   integrations: [mdx(), sitemap()],
   vite: {
     plugins: [tailwindcss()],

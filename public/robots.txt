@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://finnyuan9527.github.io/finn-site/sitemap-index.xml
+Sitemap: https://finnyuan9527.github.io/sitemap-index.xml

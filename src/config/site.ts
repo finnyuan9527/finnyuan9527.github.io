@@ -19,7 +19,7 @@ export const site = {
 
 export type NavItem = (typeof site.nav)[number];
 
-// 站点 base 路径(GitHub Pages 部署需要 /finn-site 前缀)
+// 站点 base 路径(根路径部署为 '',子路径部署需对应前缀)
 // 所有内部链接必须通过此函数拼接,否则点击后会丢失前缀导致 404
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 

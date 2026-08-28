@@ -27,7 +27,7 @@ pnpm build
 
 之后推送到 `main` 分支,GitHub Actions 会自动构建并部署到 GitHub Pages。
 
-线上地址:https://finnyuan9527.github.io/finn-site
+线上地址:https://finnyuan9527.github.io
 
 ## 项目结构
 
