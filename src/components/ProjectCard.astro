@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { categoryLabels } from '../config/categories';
+import { categoryLabels, categoryColors } from '../config/categories';
 import { url } from '../config/site';
 
 interface Props {
@@ -20,7 +20,7 @@ const { title, tagline, category } = project.data;
     class="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] transition-transform duration-300 group-hover:scale-x-100"
   ></span>
   <div class="flex items-center justify-between gap-3">
-    <span class="rounded-full bg-[var(--color-accent)]/10 px-3 py-1 text-xs font-medium text-[var(--color-accent)]">
+    <span class:list={['rounded-full px-3 py-1 text-xs font-medium', categoryColors[category]]}>
       {categoryLabels[category]}
     </span>
     <span

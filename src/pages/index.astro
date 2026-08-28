@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Section from '../components/Section.astro';
 import AbilityCard from '../components/AbilityCard.astro';
 import { site, url } from '../config/site';
-import { categoryLabels } from '../config/categories';
+import { categoryLabels, categoryColors } from '../config/categories';
 
 // 读取精选项目 - 迭代 2
 const featuredProjects = (await getCollection('projects'))
@@ -60,15 +60,16 @@ const slogans = [
         class="animate-fade-up mt-6 text-4xl leading-tight tracking-tight sm:text-5xl lg:text-6xl"
         style="animation-delay: 80ms"
       >
-        我是{site.name},一名长期实践企业数字化与
-        AI
-        落地的<span class="bg-[linear-gradient(to_top,rgb(20_184_166/0.22)_28%,transparent_28%)] px-0.5">架构师</span>。
+        让 AI
+        <span class="bg-[linear-gradient(to_top,rgb(20_184_166/0.22)_28%,transparent_28%)] px-0.5">真正进入业务</span
+        >,而不只是进入演示。
       </h1>
       <p
         class="animate-fade-up mt-6 max-w-2xl text-lg leading-relaxed text-[var(--color-muted)]"
         style="animation-delay: 160ms"
       >
-        我关注如何把模型、数据、系统和流程连接起来,让 AI 真正进入业务,成为可用、可控、可持续的生产力。
+        我是{site.name},{site.role}。关注如何把模型、数据、系统和流程连接起来,让 AI
+        成为可用、可控、可持续的生产力。
       </p>
       <div class="animate-fade-up mt-8 flex flex-wrap gap-3" style="animation-delay: 240ms">
         <a
@@ -87,17 +88,19 @@ const slogans = [
     </div>
   </section>
 
-  <!-- 个人标语 - 素材 7.4 -->
-  <Section>
-    <div class="flex flex-col gap-4">
-      {slogans.map((s, i) => (
-        <p class="flex items-start gap-3 text-[var(--color-text)]">
-          <span class="mt-1 text-[var(--color-accent)]">—</span>
-          <span class="text-lg">{s}</span>
-        </p>
-      ))}
+  <!-- 个人标语 - 素材 7.4,深蓝反色带制造节奏重心 -->
+  <section class="bg-[var(--color-primary)]">
+    <div class="mx-auto max-w-3xl px-6 py-16 sm:py-20">
+      <div class="flex flex-col gap-6">
+        {slogans.map((s) => (
+          <p class="flex items-start gap-4 text-white/90">
+            <span class="mt-2 text-[var(--color-accent)]" aria-hidden="true">—</span>
+            <span class="text-xl leading-relaxed sm:text-2xl">{s}</span>
+          </p>
+        ))}
+      </div>
     </div>
-  </Section>
+  </section>
 
   <!-- 三项核心能力 -->
   <Section title="核心能力" subtitle="从技术跨度到工程交付,关注 AI 进入真实业务的完整链路。">
@@ -108,8 +111,12 @@ const slogans = [
     </div>
   </Section>
 
-  <!-- 精选项目 - 迭代 2 动态读取 -->
-  <Section title="精选项目" subtitle="AI 应用、AI 平台、企业系统与研发提效的真实案例。">
+  <!-- 精选项目 - 迭代 2 动态读取,白色带与灰色区形成节奏交替 -->
+  <Section
+    title="精选项目"
+    subtitle="AI 应用、AI 平台、企业系统与研发提效的真实案例。"
+    class="border-y border-[var(--color-border)] bg-white"
+  >
     <div class="grid gap-4 sm:grid-cols-2">
       {featuredProjects.map((project) => (
         <a
@@ -126,7 +133,7 @@ const slogans = [
           >
             ↗
           </span>
-          <span class="w-fit rounded-full bg-[var(--color-accent)]/10 px-3 py-1 text-xs font-medium text-[var(--color-accent)]">
+          <span class:list={['w-fit rounded-full px-3 py-1 text-xs font-medium', categoryColors[project.data.category]]}>
             {categoryLabels[project.data.category]}
           </span>
           <h3 class="mt-4 text-lg text-[var(--color-primary)] group-hover:text-[var(--color-accent)]">
@@ -136,8 +143,11 @@ const slogans = [
         </a>
       ))}
     </div>
-    <a href={url('/projects')} class="mt-6 inline-block text-sm font-medium text-[var(--color-accent)] hover:underline underline-offset-4">
-      查看全部项目 →
+    <a
+      href={url('/projects')}
+      class="mt-8 inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-accent)]/40 px-4 py-2 text-sm font-medium text-[var(--color-accent)] transition-colors hover:bg-[var(--color-accent)]/10"
+    >
+      查看全部项目 <span aria-hidden="true">→</span>
     </a>
   </Section>
 
@@ -166,8 +176,11 @@ const slogans = [
         </a>
       ))}
     </div>
-    <a href={url('/notes')} class="mt-6 inline-block text-sm font-medium text-[var(--color-accent)] hover:underline underline-offset-4">
-      查看全部笔记 →
+    <a
+      href={url('/notes')}
+      class="mt-8 inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-accent)]/40 px-4 py-2 text-sm font-medium text-[var(--color-accent)] transition-colors hover:bg-[var(--color-accent)]/10"
+    >
+      查看全部笔记 <span aria-hidden="true">→</span>
     </a>
   </Section>
 </BaseLayout>

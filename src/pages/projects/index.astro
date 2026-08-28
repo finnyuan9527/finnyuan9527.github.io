@@ -11,7 +11,7 @@ const projects = (await getCollection('projects')).sort(
 
 <BaseLayout title="项目" description="AI 应用、AI 平台、企业系统与研发提效的真实项目案例。">
   <section class="border-b border-[var(--color-border)] bg-white">
-    <div class="mx-auto max-w-5xl px-6 py-12 sm:py-16">
+    <div class="mx-auto max-w-3xl px-6 py-12 sm:py-16">
       <h1 class="text-3xl sm:text-4xl">项目案例</h1>
       <p class="mt-3 max-w-2xl text-[var(--color-muted)]">
         从 AI 应用落地到平台建设,从企业系统集成到研发提效,用真实项目展示方法与结果。
@@ -19,7 +19,7 @@ const projects = (await getCollection('projects')).sort(
     </div>
   </section>
 
-  <div class="mx-auto max-w-5xl px-6 py-8">
+  <div class="mx-auto max-w-3xl px-6 py-8">
     <!-- 分类筛选 -->
     <div class="mb-8 flex flex-wrap gap-2" id="project-filters">
       {categoryOptions.map((cat, i) => (
