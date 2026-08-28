@@ -23,7 +23,7 @@ const dateStr = date.toLocaleDateString('zh-CN', {
 });
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} article={{ publishedTime: date, tags }}>
   <article class="mx-auto max-w-3xl px-6 py-12 sm:py-16">
     <a href={url('/notes')} class="text-sm text-[var(--color-muted)] hover:text-[var(--color-accent)]">
       ← 返回思考
