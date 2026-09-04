@@ -5,12 +5,12 @@ export const categoryLabels: Record<string, string> = {
   'dev-efficiency': '研发提效',
 };
 
-// 分类标签色相区分,避免全站标签同色导致的信息层级扁平
+// 分类标签色相区分,暖色调适配电影主题
 export const categoryColors: Record<string, string> = {
   'ai-app': 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]',
-  'ai-platform': 'bg-sky-500/10 text-sky-600',
-  enterprise: 'bg-indigo-500/10 text-indigo-600',
-  'dev-efficiency': 'bg-amber-500/10 text-amber-600',
+  'ai-platform': 'bg-amber-700/10 text-amber-700',
+  enterprise: 'bg-stone-600/10 text-stone-600',
+  'dev-efficiency': 'bg-yellow-700/10 text-yellow-700',
 };
 
 export const categoryOptions = [

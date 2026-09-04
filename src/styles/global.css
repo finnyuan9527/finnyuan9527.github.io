@@ -1,17 +1,21 @@
 @import "tailwindcss";
 
 @theme {
-  /* 主色 - 素材手册第六章 */
-  --color-primary: #0B2A4A;
-  --color-bg: #F7F8FA;
-  --color-accent: #14B8A6;
-  --color-text: #1F2937;
-  --color-muted: #6B7280;
-  --color-border: #E5E7EB;
+  /* 电影暖色系 - 对标目标站 OKLCH 值 */
+  --color-primary: #1a1a1a;        /* oklch(20% .02 60) 近黑暖灰 */
+  --color-bg: #f9f8f6;             /* oklch(97% .008 80) 暖白 */
+  --color-accent: #a8703a;         /* oklch(55% .12 65) 琥珀铜色 */
+  --color-accent-soft: #c4915a;    /* oklch(70% .08 65) 柔琥珀 */
+  --color-text: #2a2522;           /* oklch(25% .02 60) */
+  --color-muted: #6b5f55;          /* oklch(48% .02 60) 暖灰 */
+  --color-border: #e6dfd7;         /* 琥珀色调边框 */
+  --color-film-black: #1a1a1a;     /* 深胶片黑 */
 
   /* 字体 */
-  --font-sans: "Inter", "PingFang SC", "Noto Sans SC", "Source Han Sans SC",
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Georgia", "Times New Roman", "Songti SC", "STSong", serif;
+  --font-sans: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", ui-sans-serif,
+    system-ui, -apple-system, sans-serif;
+  --font-mono: "Courier New", "SF Mono", ui-monospace, monospace;
 }
 
 @layer base {
@@ -20,7 +24,7 @@
   }
 
   ::selection {
-    background-color: rgb(20 184 166 / 0.22);
+    background-color: rgb(168 112 58 / 0.22);
   }
 
   body {
@@ -31,9 +35,11 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  /* 所有标题用衬线体 - 电影标题感 */
   h1, h2, h3, h4 {
     color: var(--color-primary);
-    font-weight: 600;
+    font-family: var(--font-display);
+    font-weight: 700;
     letter-spacing: -0.02em;
   }
 
@@ -45,13 +51,30 @@
 }
 
 @layer utilities {
-  /* 蓝图网格纹理 - 契合架构师人设,径向渐隐不抢内容 */
-  .bg-grid {
-    background-image:
-      linear-gradient(to right, rgb(11 42 74 / 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(11 42 74 / 0.05) 1px, transparent 1px);
-    background-size: 32px 32px;
-    mask-image: radial-gradient(ellipse 90% 85% at 50% 0%, black 30%, transparent 78%);
+  /* 胶片颗粒纹理 - 全站覆盖 */
+  .grain-overlay {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    opacity: 0.025;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* 信箱模式容器 */
+  .letterbox {
+    min-height: 100vh;
+  }
+
+  /* 电影章节标签 */
+  .chapter-label {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-accent);
   }
 
   /* 首屏淡入上移动效 */

@@ -8,15 +8,12 @@ const isActive = (href: string) => {
 };
 ---
 
-<header id="top" class="sticky top-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-bg)]/80 backdrop-blur-md">
+<header id="top" class="sticky top-0 z-50 border-b border-[var(--color-accent)]/10 bg-[var(--color-bg)]/60 backdrop-blur-xl">
   <nav class="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
-    <a href={url('/')} class="flex items-center gap-2.5 text-[var(--color-primary)] font-semibold">
-      <span class="inline-flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-accent)] text-sm font-bold text-white shadow-sm">
-        F
-      </span>
-      <span class="text-sm">{site.name}</span>
+    <a href={url('/')} class="font-display text-lg font-bold tracking-tight text-[var(--color-primary)]">
+      {site.name}
     </a>
-    <ul class="flex items-center gap-6 text-sm">
+    <ul class="flex items-center gap-7 text-sm">
       {site.nav.map((item) => (
         <li>
           <a
@@ -24,9 +21,10 @@ const isActive = (href: string) => {
             class:list={[
               'relative transition-colors after:absolute after:inset-x-0 after:-bottom-1.5 after:h-0.5 after:origin-left after:rounded-full after:bg-[var(--color-accent)] after:transition-transform after:duration-300',
               isActive(item.href)
-                ? 'font-medium text-[var(--color-primary)] after:scale-x-100'
-                : 'text-[var(--color-muted)] after:scale-x-0 hover:text-[var(--color-primary)] hover:after:scale-x-100',
+                ? 'font-medium text-[var(--color-accent)] after:scale-x-100'
+                : 'text-[var(--color-muted)] after:scale-x-0 hover:text-[var(--color-accent)] hover:after:scale-x-100',
             ]}
+            style="letter-spacing: 0.0875em"
           >
             {item.label}
           </a>

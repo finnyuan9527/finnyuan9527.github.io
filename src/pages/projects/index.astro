@@ -12,7 +12,8 @@ const projects = (await getCollection('projects')).sort(
 <BaseLayout title="项目" description="AI 应用、AI 平台、企业系统与研发提效的真实项目案例。">
   <section class="border-b border-[var(--color-border)] bg-white">
     <div class="mx-auto max-w-3xl px-6 py-12 sm:py-16">
-      <h1 class="text-3xl sm:text-4xl">项目案例</h1>
+      <p class="chapter-label">FILM LIBRARY</p>
+      <h1 class="mt-3 text-3xl sm:text-4xl">项目案例</h1>
       <p class="mt-3 max-w-2xl text-[var(--color-muted)]">
         从 AI 应用落地到平台建设,从企业系统集成到研发提效,用真实项目展示方法与结果。
       </p>
@@ -29,7 +30,7 @@ const projects = (await getCollection('projects')).sort(
             'rounded-full border px-4 py-1.5 text-sm transition-colors',
             i === 0
               ? 'border-[var(--color-primary)] bg-[var(--color-primary)] text-white'
-              : 'border-[var(--color-border)] text-[var(--color-muted)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)]',
+              : 'border-[var(--color-border)] text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]',
           ]}
         >
           {cat.label}

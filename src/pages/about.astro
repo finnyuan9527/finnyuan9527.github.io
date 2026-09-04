@@ -6,14 +6,14 @@ import Section from '../components/Section.astro';
 const projects = await getCollection('projects');
 const notes = await getCollection('notes');
 
-// 关键数字 - 均来自站点真实内容,不做虚构
+// 关键数字
 const stats = [
   { value: `${projects.length}`, unit: '个', label: '代表项目案例' },
   { value: '6', unit: '个', label: '核心能力方向' },
   { value: `${notes.length}`, unit: '篇', label: '实践思考笔记' },
 ];
 
-// 职业阶段 - 基于真实经历的阶段划分,不虚构具体年份
+// 职业阶段
 const journey = [
   {
     phase: '起点',
@@ -32,7 +32,7 @@ const journey = [
   },
 ];
 
-// 能力地图 - 素材第三章 3.2
+// 能力地图
 const abilityMap = [
   {
     direction: 'AI 架构与平台',
@@ -66,7 +66,7 @@ const abilityMap = [
   },
 ];
 
-// 工作方法与价值观 - 素材第五章
+// 工作方法与价值观
 const values = [
   {
     title: '从验证开始,而不是从想象开始',
@@ -96,12 +96,13 @@ const focus = [
 ---
 
 <BaseLayout title="关于我">
-  <!-- 长版自我介绍 - 素材 7.3 -->
+  <!-- 长版自我介绍 -->
   <section class="border-b border-[var(--color-border)] bg-white">
     <div class="mx-auto max-w-3xl px-6 py-16 sm:py-20">
-      <h1 class="text-3xl sm:text-4xl">关于我</h1>
-      <p class="mt-3 text-lg text-[var(--color-muted)]">
-        现任复星集团高级研发总监 · 架构师
+      <p class="chapter-label">CHARACTER PROFILE</p>
+      <h1 class="mt-3 text-3xl sm:text-4xl">关于我</h1>
+      <p class="mt-3 text-lg text-[var(--color-accent)]" style="letter-spacing: 0.04em">
+        现任复星集团 · 高级研发总监 · 架构师
       </p>
       <div class="mt-6 space-y-4 text-base leading-relaxed text-[var(--color-text)]">
         <p>
@@ -119,8 +120,8 @@ const focus = [
       <div class="mt-10 grid grid-cols-3 gap-4 border-t border-[var(--color-border)] pt-8">
         {stats.map((s) => (
           <div>
-            <p class="text-3xl font-semibold tracking-tight text-[var(--color-primary)] tabular-nums">
-              {s.value}<span class="ml-0.5 text-base font-medium text-[var(--color-muted)]">{s.unit}</span>
+            <p class="text-3xl font-bold tracking-tight text-[var(--color-primary)] tabular-nums" style="font-family: var(--font-display)">
+              {s.value}<span class="ml-0.5 text-base font-medium text-[var(--color-muted)]" style="font-family: var(--font-sans)">{s.unit}</span>
             </p>
             <p class="mt-1 text-sm text-[var(--color-muted)]">{s.label}</p>
           </div>
@@ -129,6 +130,7 @@ const focus = [
 
       <!-- 职业阶段时间线 -->
       <div class="mt-12">
+        <p class="chapter-label mb-3">CAREER PATH</p>
         <h2 class="text-xl">职业路径</h2>
         <ol class="mt-6 space-y-0">
           {journey.map((j, i) => (
@@ -148,7 +150,7 @@ const focus = [
               </span>
               <div>
                 <span class="inline-block rounded-full bg-[var(--color-accent)]/10 px-2.5 py-0.5 text-xs font-medium text-[var(--color-accent)]">
-                  {j.phase}
+                  {`0${i + 1} · ${j.phase}`}
                 </span>
                 <h3 class="mt-2 text-base">{j.title}</h3>
                 <p class="mt-1 text-sm leading-relaxed text-[var(--color-muted)]">{j.body}</p>
@@ -160,8 +162,8 @@ const focus = [
     </div>
   </section>
 
-  <!-- 能力地图 - 素材 3.2 -->
-  <Section title="能力地图" subtitle="六个方向,从技术深度到组织协作。">
+  <!-- 能力地图 -->
+  <Section chapter="ABILITY MAP" title="能力地图" subtitle="六个方向,从技术深度到组织协作。">
     <div class="overflow-x-auto rounded-xl border border-[var(--color-border)] bg-white">
       <table class="w-full text-left text-sm">
         <thead class="border-b border-[var(--color-border)] bg-[var(--color-bg)]">
@@ -186,10 +188,10 @@ const focus = [
     </div>
   </Section>
 
-  <!-- 工作方法与价值观 - 素材第五章 -->
-  <Section title="工作方法与价值观">
+  <!-- 工作方法与价值观 -->
+  <Section chapter="METHODOLOGY & VALUES" title="工作方法与价值观">
     <div class="space-y-6">
-      {values.map((v) => (
+      {values.map((v, i) => (
         <div class="rounded-xl border border-[var(--color-border)] bg-white p-6">
           <h3 class="text-lg">{v.title}</h3>
           <p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">{v.body}</p>
@@ -199,7 +201,7 @@ const focus = [
   </Section>
 
   <!-- 当前关注问题 -->
-  <Section title="当前关注" subtitle="正在思考和推进的问题。">
+  <Section chapter="CURRENT FOCUS" title="当前关注" subtitle="正在思考和推进的问题。">
     <ul class="space-y-3">
       {focus.map((f) => (
         <li class="flex items-start gap-3 text-[var(--color-text)]">
