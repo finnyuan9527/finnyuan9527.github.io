@@ -17,6 +17,10 @@ const latestNotes = (await getCollection('notes'))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 2);
 
+// 全部项目数和笔记数 - 用于统计
+const allProjects = await getCollection('projects');
+const allNotes = await getCollection('notes');
+
 // 三项核心能力
 const abilities = [
   {
@@ -41,6 +45,13 @@ const slogans = [
   '把前沿 AI 带进真实业务',
   '让 AI 从能力演示走向长期运营',
   '用工程化方法,把复杂问题变成可运行的系统',
+];
+
+// 关键数字
+const stats = [
+  { value: `${allProjects.length}`, unit: '个', label: '代表项目案例' },
+  { value: '6', unit: '个', label: '核心能力方向' },
+  { value: `${allNotes.length}`, unit: '篇', label: '实践思考笔记' },
 ];
 ---
 
@@ -86,23 +97,48 @@ const slogans = [
     </div>
   </section>
 
-  <!-- 个人标语 - 深色反色带 -->
-  <section class="bg-[var(--color-primary)]">
-    <div class="mx-auto max-w-3xl px-6 py-16 sm:py-20">
-      <div class="flex flex-col gap-6">
+  <!-- CHAPTER 01 关于主角 - bio + 职务 + 标语 + 数字 -->
+  <section class="border-b border-[var(--color-border)] bg-white">
+    <div class="mx-auto max-w-3xl px-6 py-12 sm:py-16">
+      <p class="chapter-label">CHAPTER 01</p>
+      <h2 class="mt-3 text-2xl sm:text-3xl">关于主角</h2>
+      <div class="mt-6 space-y-4 text-base leading-relaxed text-[var(--color-text)]">
+        <p>
+          我是{site.name},{site.role}。关注如何把模型、数据、系统和流程连接起来,让 AI
+          成为可用、可控、可持续的生产力。
+        </p>
+        <p class="text-[var(--color-accent)]" style="letter-spacing: 0.04em">
+          复星集团 · 高级研发总监 · 架构师
+        </p>
+      </div>
+
+      <!-- 标语 -->
+      <div class="mt-8 flex flex-col gap-4">
         {slogans.map((s) => (
-          <p class="flex items-start gap-4 text-white/90">
+          <p class="flex items-start gap-4 text-[var(--color-text)]">
             <span class="mt-2 text-[var(--color-accent)]" aria-hidden="true">—</span>
-            <span class="text-xl leading-relaxed sm:text-2xl">{s}</span>
+            <span class="text-lg leading-relaxed sm:text-xl">{s}</span>
           </p>
+        ))}
+      </div>
+
+      <!-- 关键数字 -->
+      <div class="mt-10 grid grid-cols-3 gap-4 border-t border-[var(--color-border)] pt-8">
+        {stats.map((s) => (
+          <div>
+            <p class="text-3xl font-bold tracking-tight text-[var(--color-primary)] tabular-nums" style="font-family: var(--font-display)">
+              {s.value}<span class="ml-0.5 text-base font-medium text-[var(--color-muted)]" style="font-family: var(--font-sans)">{s.unit}</span>
+            </p>
+            <p class="mt-1 text-sm text-[var(--color-muted)]">{s.label}</p>
+          </div>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- 核心能力 - CHAPTER 01 -->
+  <!-- CHAPTER 02 核心能力 -->
   <Section
-    chapter="CHAPTER 01"
+    chapter="CHAPTER 02"
     title="核心能力"
     subtitle="从技术跨度到工程交付,关注 AI 进入真实业务的完整链路。"
   >
@@ -113,9 +149,9 @@ const slogans = [
     </div>
   </Section>
 
-  <!-- 精选项目 - CHAPTER 02 -->
+  <!-- CHAPTER 03 精选项目 -->
   <Section
-    chapter="CHAPTER 02"
+    chapter="CHAPTER 03"
     title="精选项目"
     subtitle="AI 应用、AI 平台、企业系统与研发提效的真实案例。"
     class="border-y border-[var(--color-border)] bg-white"
@@ -130,12 +166,6 @@ const slogans = [
             aria-hidden="true"
             class="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] transition-transform duration-300 group-hover:scale-x-100"
           ></span>
-          <span
-            aria-hidden="true"
-            class="absolute right-5 top-5 text-lg text-[var(--color-accent)] opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:opacity-100"
-          >
-            ↗
-          </span>
           <span class:list={['w-fit rounded-full px-3 py-1 text-xs font-medium', categoryColors[project.data.category]]}>
             {categoryLabels[project.data.category]}
           </span>
@@ -143,6 +173,9 @@ const slogans = [
             {project.data.title}
           </h3>
           <p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">{project.data.tagline}</p>
+          <span class="mt-3 text-sm text-[var(--color-accent)] opacity-0 transition-all duration-300 group-hover:opacity-100">
+            查看特写 →
+          </span>
         </a>
       ))}
     </div>
@@ -154,9 +187,9 @@ const slogans = [
     </a>
   </Section>
 
-  <!-- 思考与观点 - CHAPTER 03 -->
+  <!-- CHAPTER 04 思考与观点 -->
   <Section
-    chapter="CHAPTER 03"
+    chapter="CHAPTER 04"
     title="思考与观点"
     subtitle="关于 AI 边界、流程重构与企业架构的实践笔记。"
   >
@@ -180,6 +213,13 @@ const slogans = [
             {note.data.title}
           </h3>
           <p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">{note.data.description}</p>
+          {note.data.tags.length > 0 && (
+            <div class="mt-3 flex flex-wrap gap-3 text-sm text-[var(--color-muted)]">
+              {note.data.tags.map((tag) => (
+                <span>#{tag}</span>
+              ))}
+            </div>
+          )}
         </a>
       ))}
     </div>
