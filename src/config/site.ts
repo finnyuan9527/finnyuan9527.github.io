@@ -1,11 +1,11 @@
 export const site = {
   name: '袁飞扬',
   nameEn: 'Finn Yuan',
-  role: '企业数字化与 AI 落地架构师',
+  role: '集团总部高级架构师 · AI 产品与技术负责人',
   roleEn: 'AI Architecture & Digital Practice',
-  tagline: '把前沿 AI 带进真实业务',
+  tagline: '把 AI 真正装进业务流程',
   description:
-    '长期实践企业数字化与 AI 落地的架构师,关注如何把模型、数据、系统和流程连接起来,让 AI 真正进入业务。',
+    '15 年技术架构,把 AI 从演示做到算得过账、守得住安全、进得了业务流程。集团 AI 能力中枢与智能体平台技术出品人。',
   email: 'finnyuan9527@gmail.com',
   github: 'https://github.com/finnyuan9527',
   nav: [
