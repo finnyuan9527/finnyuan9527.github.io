@@ -4,9 +4,10 @@ import { url } from '../config/site';
 
 interface Props {
   note: CollectionEntry<'notes'>;
+  headingLevel?: 'h2' | 'h3';
 }
 
-const { note } = Astro.props;
+const { note, headingLevel: Heading = 'h2' } = Astro.props;
 const { title, description, date, tags } = note.data;
 
 const dateStr = date.toLocaleDateString('zh-CN', {
@@ -16,27 +17,8 @@ const dateStr = date.toLocaleDateString('zh-CN', {
 });
 ---
 
-<a
-  href={url(`/notes/${note.id}`)}
-  class="group relative block overflow-hidden rounded-xl border border-[var(--color-border)] bg-white p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[rgb(168_112_58/0.08)]"
->
-  <span
-    aria-hidden="true"
-    class="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] transition-transform duration-300 group-hover:scale-x-100"
-  ></span>
-  <div class="flex items-center gap-2 text-sm text-[var(--color-muted)]">
-    <span class="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]"></span>
-    <time class="tabular-nums" datetime={date.toISOString()}>{dateStr}</time>
-  </div>
-  <h3 class="mt-2 text-lg text-[var(--color-primary)] group-hover:text-[var(--color-accent)]">
-    {title}
-  </h3>
-  <p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">{description}</p>
-  {tags.length > 0 && (
-    <div class="mt-3 flex flex-wrap gap-3 text-sm text-[var(--color-muted)]">
-      {tags.map((tag) => (
-        <span>#{tag}</span>
-      ))}
-    </div>
-  )}
+<a href={url(`/notes/${note.id}`)} class="note-card group">
+  <time class="note-date" datetime={date.toISOString()}>{dateStr}</time>
+  <div class="note-copy"><Heading class="note-title">{title}</Heading><p>{description}</p>{tags.length > 0 && <div class="note-tags">{tags.map(tag => <span>{tag}</span>)}</div>}</div>
+  <span class="note-arrow" aria-hidden="true">↗</span>
 </a>

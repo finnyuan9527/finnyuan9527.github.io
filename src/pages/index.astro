@@ -1,286 +1,49 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Section from '../components/Section.astro';
-import AbilityCard from '../components/AbilityCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import NoteCard from '../components/NoteCard.astro';
+import ContactCTA from '../components/ContactCTA.astro';
 import { site, url } from '../config/site';
-import { categoryLabels, categoryColors } from '../config/categories';
-
-// 读取精选项目
-const featuredProjects = (await getCollection('projects'))
-  .filter((p) => p.data.featured)
-  .sort((a, b) => a.data.order - b.data.order)
-  .slice(0, 3);
-
-// 读取最新笔记
-const latestNotes = (await getCollection('notes'))
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0, 2);
-
-// 三项核心能力
+const projects = (await getCollection('projects')).filter(p => p.data.featured).sort((a,b) => a.data.order-b.data.order).slice(0,3);
+const notes = (await getCollection('notes')).sort((a,b) => b.data.date.getTime()-a.data.date.getTime()).slice(0,2);
 const abilities = [
-  {
-    title: 'AI 架构与平台',
-    description: '企业级 AI 平台、模型网关、模型接入与路由、权限、成本与稳定性治理,让 AI 从单点试验走向统一平台和规模化使用。',
-    tags: ['模型网关', 'AI 平台治理', '私有化部署'],
-  },
-  {
-    title: 'Agent 与 RAG',
-    description: '智能体、知识库、检索增强、深度研究、文档解析与工作流编排,把模型能力嵌入真实业务任务和知识流程。',
-    tags: ['智能体', 'RAG', '知识库', '工作流编排'],
-  },
-  {
-    title: '企业数字化与工程交付',
-    description: '低代码、主数据、数据治理、系统集成与迁移,拥有从方案评估、架构设计到部署、监控、治理的完整交付能力。',
-    tags: ['低代码', '数据治理', '系统集成', '工程交付'],
-  },
-];
-
-// 个人标语 - 选自素材金句库
-const slogans = [
-  '应用优先于基建,重点在于"造车",而非"修路"。',
-  '验证高于执行。',
-  '降低失败成本,比避免失败更重要。',
-];
-
-// 关键数字 - 真实成绩,电影预告片式数字
-const stats = [
-  { value: '15', unit: '年', label: '技术架构经验' },
-  { value: '39', unit: '亿', label: '月 Token 峰值' },
-  { value: '2', unit: '万', label: '月度 AI 成本' },
-];
-
-// 三重身份 - Builder / Governor / Translator
-const roles = [
-  {
-    title: 'Builder',
-    zh: '动手的架构师',
-    body: '自己部署推理引擎、自己搭智能体、自己排查 K8s 证书。仍然写代码,因为这是判断力的来源。',
-  },
-  {
-    title: 'Governor',
-    zh: '治理的定规矩人',
-    body: '定模型路由、定密钥规范、定成本看板、定数据主权红线。让 AI 算得过账、守得住安全。',
-  },
-  {
-    title: 'Translator',
-    zh: '双向翻译者',
-    body: '把技术判断翻译成决策层听得懂的业务语言,也把集团战略翻译成工程师听得懂的架构约束。',
-  },
+  { title: 'AI 平台与治理', body: '统一模型接入、任务路由、权限与成本归因，让分散的 AI 调用可以持续运营。', href: '/projects/model-routing-gateway', label: '查看模型网关案例' },
+  { title: '知识与业务智能化', body: '评估知识检索、智能体和任务编排，把模型能力放进有数据、有权限、有人负责的业务环节。', href: '/projects/enterprise-rag-knowledge', label: '查看知识库选型案例' },
+  { title: '企业系统与工程交付', body: '梳理主数据、系统依赖与迁移边界，分阶段打通数据链路，保障业务连续性。', href: '/projects/enterprise-system-integration', label: '查看系统集成案例' },
 ];
 ---
 
 <BaseLayout>
-  <!-- 首屏 - A FILM BY -->
-  <section class="relative overflow-hidden border-b border-[var(--color-border)] bg-white">
-    <div class="relative mx-auto max-w-3xl px-6 py-20 sm:py-28">
-      <p class="animate-fade-up chapter-label">
-        A FILM BY {site.name}
-      </p>
-      <h1
-        class="animate-fade-up mt-6 text-5xl leading-tight tracking-tight sm:text-6xl lg:text-7xl"
-        style="animation-delay: 80ms"
-      >
-        {site.name}
-      </h1>
-      <p
-        class="animate-fade-up mt-4 text-lg text-[var(--color-accent)]"
-        style="animation-delay: 140ms; letter-spacing: 0.04em"
-      >
-        {site.role} · 15 年技术架构
-      </p>
-      <p
-        class="animate-fade-up mt-6 max-w-2xl text-xl leading-relaxed text-[var(--color-muted)]"
-        style="animation-delay: 200ms"
-      >
-        让 AI 真正进入业务,而不只是进入演示。
-      </p>
-      <div class="animate-fade-up mt-8 flex flex-wrap gap-3" style="animation-delay: 280ms">
-        <a
-          href={url('/projects')}
-          class="inline-flex items-center rounded-lg bg-[var(--color-primary)] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[var(--color-primary)]/90"
-        >
-          查看项目
-        </a>
-        <a
-          href={url('/about')}
-          class="inline-flex items-center rounded-lg border border-[var(--color-border)] bg-white px-5 py-2.5 text-sm font-medium text-[var(--color-primary)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-        >
-          关于我
-        </a>
+  <section class="home-hero">
+    <div class="site-container hero-layout">
+      <div class="hero-copy">
+        <h1 class="signature">{site.name}</h1>
+        <p class="hero-role">{site.role}</p>
+        <p class="hero-message"><strong class="hero-statement">让 AI 真正进入业务流程。</strong><span class="hero-description">15 年技术架构经验，连接企业 AI 平台、知识与业务，从方案验证到工程交付。</span></p>
+        <div class="hero-actions"><a href={url('/projects')} class="button-primary">查看项目案例 <span aria-hidden="true">↗</span></a><a href={url('/contact')} class="button-secondary">联系我</a></div>
       </div>
+      <figure class="hero-visual">
+        <img src={url('/images/abstract-ink-hero.webp')} alt="暖白纸面上石墨色弧形笔触、灰色墨迹与少量铜色构成的抽象画" width="1536" height="1024" fetchpriority="high" />
+        <figcaption>留白与张力 <span>AI 生成抽象作品</span></figcaption>
+      </figure>
     </div>
   </section>
-
-  <!-- CHAPTER 01 关于主角 - bio + 三重身份 + 标语 + 数字 -->
-  <section class="border-b border-[var(--color-border)] bg-white">
-    <div class="mx-auto max-w-3xl px-6 py-12 sm:py-16">
-      <p class="chapter-label">CHAPTER 01</p>
-      <h2 class="mt-3 text-2xl sm:text-3xl">关于主角</h2>
-      <div class="mt-6 space-y-4 text-base leading-relaxed text-[var(--color-text)]">
-        <p>
-          我是{site.name},集团总部高级架构师、数智化与 AI 条线 AI 产品与技术部门负责人。15 年技术架构经验,长期深耕人工智能、云原生与企业级平台建设,现阶段重点关注 Agentic Agent 在企业知识与业务流程中的落地。
-        </p>
-        <p class="text-[var(--color-accent)]" style="letter-spacing: 0.04em">
-          超大型多元化集团 · 高级研发总监 · 架构师
-        </p>
-        <p class="text-[var(--color-muted)]">
-          我关心的从来不是"AI 能做什么",而是"AI 在什么条件下,才真的能被一个组织用起来"。
-        </p>
-      </div>
-
-      <!-- 三重身份 -->
-      <div class="mt-8 grid gap-4 sm:grid-cols-3">
-        {roles.map((r) => (
-          <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-5">
-            <p class="font-display text-lg text-[var(--color-primary)]" style="font-family: var(--font-display)">
-              {r.title}
-            </p>
-            <p class="mt-1 text-sm font-medium text-[var(--color-accent)]">{r.zh}</p>
-            <p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">{r.body}</p>
-          </div>
-        ))}
-      </div>
-
-      <!-- 标语 -->
-      <div class="mt-8 flex flex-col gap-4">
-        {slogans.map((s) => (
-          <p class="flex items-start gap-4 text-[var(--color-text)]">
-            <span class="mt-2 text-[var(--color-accent)]" aria-hidden="true">—</span>
-            <span class="text-lg leading-relaxed sm:text-xl">{s}</span>
-          </p>
-        ))}
-      </div>
-
-      <!-- 关键数字 -->
-      <div class="mt-10 grid grid-cols-3 gap-4 border-t border-[var(--color-border)] pt-8">
-        {stats.map((s) => (
-          <div>
-            <p class="text-3xl font-bold tracking-tight text-[var(--color-primary)] tabular-nums" style="font-family: var(--font-display)">
-              {s.value}<span class="ml-0.5 text-base font-medium text-[var(--color-muted)]" style="font-family: var(--font-sans)">{s.unit}</span>
-            </p>
-            <p class="mt-1 text-sm text-[var(--color-muted)]">{s.label}</p>
-          </div>
-        ))}
-      </div>
-    </div>
+  <section class="home-work site-container">
+    <div class="section-heading"><div><h2>精选项目</h2><p>具体问题、承担的职责与公开结果。</p></div><a href={url('/projects')} class="text-link">全部项目案例 <span aria-hidden="true">↗</span></a></div>
+    <div class="featured-projects">{projects.map(project => <ProjectCard project={project} headingLevel="h3" />)}</div>
   </section>
-
-  <!-- CHAPTER 02 核心能力 -->
-  <Section
-    chapter="CHAPTER 02"
-    title="核心能力"
-    subtitle="从技术跨度到工程交付,关注 AI 进入真实业务的完整链路。"
-  >
-    <div class="grid gap-4 sm:grid-cols-3">
-      {abilities.map((a) => (
-        <AbilityCard title={a.title} description={a.description} tags={a.tags} />
-      ))}
-    </div>
-  </Section>
-
-  <!-- CHAPTER 03 精选项目 -->
-  <Section
-    chapter="CHAPTER 03"
-    title="精选项目"
-    subtitle="AI 应用、AI 平台、企业系统与研发提效的真实案例。"
-    class="border-y border-[var(--color-border)] bg-white"
-  >
-    <div class="grid gap-4 sm:grid-cols-2">
-      {featuredProjects.map((project) => (
-        <a
-          href={url(`/projects/${project.id}`)}
-          class="group relative flex flex-col overflow-hidden rounded-xl border border-[var(--color-border)] bg-white p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[rgb(168_112_58/0.08)]"
-        >
-          <span
-            aria-hidden="true"
-            class="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] transition-transform duration-300 group-hover:scale-x-100"
-          ></span>
-          <span class:list={['w-fit rounded-full px-3 py-1 text-xs font-medium', categoryColors[project.data.category]]}>
-            {categoryLabels[project.data.category]}
-          </span>
-          <h3 class="mt-4 text-lg group-hover:text-[var(--color-accent)]">
-            {project.data.title}
-          </h3>
-          <p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">{project.data.tagline}</p>
-          <span class="mt-3 text-sm text-[var(--color-accent)] opacity-0 transition-all duration-300 group-hover:opacity-100">
-            查看特写 →
-          </span>
-        </a>
-      ))}
-    </div>
-    <a
-      href={url('/projects')}
-      class="mt-8 inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-accent)]/40 px-4 py-2 text-sm font-medium text-[var(--color-accent)] transition-colors hover:bg-[var(--color-accent)]/10"
-    >
-      查看全部项目 <span aria-hidden="true">→</span>
-    </a>
-  </Section>
-
-  <!-- CHAPTER 04 思考与观点 -->
-  <Section
-    chapter="CHAPTER 04"
-    title="思考与观点"
-    subtitle="关于 AI 边界、流程重构与企业架构的实践笔记。"
-  >
-    <div class="space-y-4">
-      {latestNotes.map((note) => (
-        <a
-          href={url(`/notes/${note.id}`)}
-          class="group relative block overflow-hidden rounded-xl border border-[var(--color-border)] bg-white p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[rgb(168_112_58/0.08)]"
-        >
-          <span
-            aria-hidden="true"
-            class="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] transition-transform duration-300 group-hover:scale-x-100"
-          ></span>
-          <div class="flex items-center gap-2 text-sm text-[var(--color-muted)]">
-            <span class="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]"></span>
-            <time class="tabular-nums" datetime={note.data.date.toISOString()}>
-              {note.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
-            </time>
-          </div>
-          <h3 class="mt-2 text-lg group-hover:text-[var(--color-accent)]">
-            {note.data.title}
-          </h3>
-          <p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">{note.data.description}</p>
-          {note.data.tags.length > 0 && (
-            <div class="mt-3 flex flex-wrap gap-3 text-sm text-[var(--color-muted)]">
-              {note.data.tags.map((tag) => (
-                <span>#{tag}</span>
-              ))}
-            </div>
-          )}
-        </a>
-      ))}
-    </div>
-    <a
-      href={url('/notes')}
-      class="mt-8 inline-flex items-center gap-1.5 rounded-lg border border-[var(--color-accent)]/40 px-4 py-2 text-sm font-medium text-[var(--color-accent)] transition-colors hover:bg-[var(--color-accent)]/10"
-    >
-      查看全部笔记 <span aria-hidden="true">→</span>
-    </a>
-  </Section>
-
-  <!-- EPILOGUE -->
-  <section class="border-t border-[var(--color-border)] bg-white">
-    <div class="mx-auto max-w-3xl px-6 py-16 sm:py-20 text-center">
-      <p class="chapter-label">EPILOGUE</p>
-      <h2 class="mt-4 text-3xl sm:text-4xl">让 AI 真正进入业务</h2>
-      <p class="mt-3 text-[var(--color-muted)]">不只是进入演示。</p>
-      <div class="mt-8 flex flex-wrap justify-center gap-3">
-        <a
-          href={url('/about')}
-          class="inline-flex items-center rounded-lg bg-[var(--color-primary)] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[var(--color-primary)]/90"
-        >
-          了解更多
-        </a>
-        <a
-          href={url('/projects')}
-          class="inline-flex items-center rounded-lg border border-[var(--color-border)] bg-white px-5 py-2.5 text-sm font-medium text-[var(--color-primary)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-        >
-          查看项目
-        </a>
-      </div>
-    </div>
+  <section class="home-capabilities site-container">
+    <div class="section-heading"><div><h2>从技术架构，到业务现场</h2><p>关注模型之外的数据、流程、权限与长期运营。</p></div></div>
+    <div class="capability-list">{abilities.map(item => <div class="capability-row"><h3>{item.title}</h3><p>{item.body}</p><a href={url(item.href)} class="text-link">{item.label}<span aria-hidden="true">↗</span></a></div>)}</div>
   </section>
+  <section class="home-profile site-container">
+    <div class="profile-title"><h2>关于我</h2><p>架构、产品与工程</p></div>
+    <div class="profile-copy"><p>我在集团总部负责 AI 产品与技术工作，经历过互联网核心系统、企业平台与系统集成，如今重点探索企业智能体与 AI 平台的落地。</p><p>我关心的不只是系统如何建成，也包括它上线之后如何被组织用起来。</p><a href={url('/about')} class="text-link">了解职业经历与工作方法 <span aria-hidden="true">↗</span></a></div>
+  </section>
+  <section class="home-notes site-container">
+    <div class="section-heading"><div><h2>思考与观点</h2><p>从实践中整理方法、验证清单与使用边界。</p></div><a href={url('/notes')} class="text-link">全部文章 <span aria-hidden="true">↗</span></a></div>
+    <div class="reading-list">{notes.map(note => <NoteCard note={note} headingLevel="h3" />)}</div>
+  </section>
+  <div class="site-container home-contact"><ContactCTA /></div>
 </BaseLayout>

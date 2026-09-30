@@ -1,40 +1,16 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { categoryLabels, categoryColors } from '../config/categories';
+import { categoryLabels } from '../config/categories';
 import { url } from '../config/site';
-
-interface Props {
-  project: CollectionEntry<'projects'>;
-}
-
-const { project } = Astro.props;
-const { title, tagline, category } = project.data;
+interface Props { project: CollectionEntry<'projects'>; headingLevel?: 'h2' | 'h3'; wide?: boolean; }
+const { project, headingLevel: Heading = 'h2', wide = false } = Astro.props;
+const { title, tagline, category, stage, role, highlight, tags } = project.data;
 ---
-
-<a
-  href={url(`/projects/${project.id}`)}
-  class="group relative flex flex-col overflow-hidden rounded-xl border border-[var(--color-border)] bg-white p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[rgb(168_112_58/0.08)]"
->
-  <span
-    aria-hidden="true"
-    class="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] transition-transform duration-300 group-hover:scale-x-100"
-  ></span>
-  <div class="flex items-center justify-between gap-3">
-    <span class:list={['rounded-full px-3 py-1 text-xs font-medium', categoryColors[category]]}>
-      {categoryLabels[category]}
-    </span>
-    <span
-      aria-hidden="true"
-      class="text-lg text-[var(--color-accent)] opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:opacity-100"
-    >
-      ↗
-    </span>
-  </div>
-  <h3 class="mt-4 text-lg text-[var(--color-primary)] group-hover:text-[var(--color-accent)]">
-    {title}
-  </h3>
-  <p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">{tagline}</p>
-  <span class="mt-3 text-sm text-[var(--color-accent)] opacity-0 transition-all duration-300 group-hover:opacity-100">
-    查看特写 →
-  </span>
+<a href={url(`/projects/${project.id}`)} data-project-link class:list={['project-card group', { 'project-card-wide': wide }]}>
+  <div class="project-card-meta"><span class="category-label">{categoryLabels[category]}</span><span class="project-stage">{stage}</span></div>
+  <Heading class="project-card-title">{title}</Heading>
+  <p class="project-card-tagline">{tagline}</p>
+  <div class="project-card-details"><p><span>我的职责</span>{role}</p><p><span>{stage === '阶段未披露' ? '设计目标' : '已记录结果'}</span>{highlight}</p></div>
+  <div class="project-card-tags">{tags.map(tag => <span>{tag}</span>)}</div>
+  <span class="project-card-link">查看案例 <span aria-hidden="true">↗</span></span>
 </a>

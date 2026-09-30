@@ -1,77 +1,37 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { categoryLabels } from '../../config/categories';
+import Prose from '../../components/Prose.astro';
+import ArticleContents from '../../components/ArticleContents.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
+import NoteCard from '../../components/NoteCard.astro';
+import { categoryLabels, categoryOptions } from '../../config/categories';
 import { url } from '../../config/site';
-
-export async function getStaticPaths() {
-  const projects = await getCollection('projects');
-  return projects.map((project) => ({
-    params: { slug: project.id },
-    props: { project },
-  }));
-}
-
+export async function getStaticPaths() { return (await getCollection('projects')).map(project => ({ params: { slug: project.id }, props: { project } })); }
 const { project } = Astro.props;
-const { Content } = await render(project);
-
-const { title, tagline, category, role, problem, approach, outcome, retrospective } =
-  project.data;
-
-const fields = [
-  { label: '我的角色', value: role },
-  { label: '解决的问题', value: problem },
-  { label: '解决方式', value: approach },
-  { label: '结果', value: outcome },
-  ...(retrospective ? [{ label: '复盘', value: retrospective }] : []),
-];
+const { Content, headings } = await render(project);
+const { title, tagline, category, stage, scope, role, problem, approach, outcome, evidence, retrospective, relatedNotes } = project.data;
+const notes = (await getCollection('notes')).filter(note => relatedNotes.includes(note.id));
+const others = (await getCollection('projects')).filter(p => p.id !== project.id).sort((a,b) => Number(b.data.category === category)-Number(a.data.category === category) || a.data.order-b.data.order).slice(0,2);
+const fields = [{label:'场景与范围',value:scope},{label:'我的职责',value:role},{label:'业务问题',value:problem},{label:'方案摘要',value:approach},{label:stage === '阶段未披露' ? '设计目标' : '已记录结果',value:outcome.replace('设计目标：','')}];
 ---
-
 <BaseLayout title={title} description={tagline}>
-  <article class="mx-auto max-w-3xl px-6 py-12 sm:py-16">
-    <a href={url('/projects')} class="text-sm text-[var(--color-muted)] hover:text-[var(--color-accent)]">
-      ← 返回项目
-    </a>
-
-    <div class="mt-6">
-      <span class="rounded-full bg-[var(--color-accent)]/10 px-3 py-1 text-xs font-medium text-[var(--color-accent)]">
-        {categoryLabels[category]}
-      </span>
-    </div>
-
-    <h1 class="mt-4 text-3xl sm:text-4xl">{title}</h1>
-    <p class="mt-3 text-lg text-[var(--color-muted)]">{tagline}</p>
-
-    <!-- 按素材 7.5 模板渲染结构化字段 -->
-    <dl class="mt-8 space-y-6">
-      {fields.map((field) => (
-        <div class="rounded-xl border border-[var(--color-border)] bg-white p-5">
-          <dt class="text-sm font-medium uppercase tracking-wider text-[var(--color-accent)]">
-            {field.label}
-          </dt>
-          <dd class="mt-2 leading-relaxed text-[var(--color-text)]">{field.value}</dd>
-        </div>
-      ))}
-    </dl>
-
-    <!-- MDX 正文 -->
-    <div class="prose mt-10 max-w-none">
-      <Content />
-    </div>
+  <article class="article-page mx-auto max-w-3xl px-6 py-10 sm:py-12">
+    <a id="project-back" href={url('/projects')} class="inline-flex min-h-11 items-center text-sm">← 返回项目案例</a>
+    <div class="mt-4 flex flex-wrap gap-2 text-sm text-[var(--color-muted)]"><span>{categoryLabels[category]}</span><span>·</span><span>{stage}</span></div>
+    <h1 class="mt-4 text-3xl sm:text-4xl">{title}</h1><p class="mt-3 text-lg leading-relaxed text-[var(--color-muted)]">{tagline}</p>
+    <dl class="mt-8 grid gap-5 border-y border-[var(--color-border)] py-6">{fields.map(field => <div><dt class="font-medium">{field.label}</dt><dd class="mt-2 leading-relaxed text-[var(--color-text)]">{field.value}</dd></div>)}</dl>
+    <section class="mt-6 rounded-xl border border-[var(--color-border)] bg-white p-5" aria-labelledby="evidence-heading"><h2 id="evidence-heading" class="text-lg">结果口径与披露范围</h2><p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">{evidence}</p></section>
+    <ArticleContents headings={headings} />
+    <div class="mt-8"><Prose><Content /></Prose></div>
+    {retrospective && <section class="mt-8 border-t border-[var(--color-border)] pt-6"><h2 class="text-xl">复盘</h2><p class="mt-3 leading-relaxed">{retrospective}</p></section>}
+    {notes.length > 0 && <section class="mt-10 border-t border-[var(--color-border)] pt-8"><h2 class="text-xl">相关方法与观点</h2><div class="mt-5 space-y-4">{notes.map(note => <NoteCard note={note} headingLevel="h3" />)}</div></section>}
+    <section class="mt-10"><h2 class="text-xl">继续查看项目案例</h2><ul class="mt-3">{others.map(p => <li><a class="inline-flex min-h-11 items-center" href={url(`/projects/${p.id}`)}>{p.data.title} →</a></li>)}</ul></section>
+    <ContactCTA title="交流这个案例中的问题" description="如果你也在处理类似的业务场景，欢迎带着目标、约束和当前阶段一起交流。" />
   </article>
 </BaseLayout>
-
-<style>
-  .prose :global(h2) {
-    color: var(--color-primary);
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-top: 2rem;
-    margin-bottom: 0.75rem;
-  }
-  .prose :global(p) {
-    color: var(--color-text);
-    line-height: 1.75;
-    margin-bottom: 1rem;
-  }
-</style>
+<script define:vars={{ allowedCategories: categoryOptions.map(c => c.id) }}>
+  const category = new URL(location.href).searchParams.get('category');
+  const back = document.querySelector('#project-back');
+  if (category && category !== 'all' && allowedCategories.includes(category) && back) { const target = new URL(back.href); target.searchParams.set('category', category); back.href = target.href; }
+</script>

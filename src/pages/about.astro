@@ -1,17 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Section from '../components/Section.astro';
+import ContactCTA from '../components/ContactCTA.astro';
+import { url } from '../config/site';
 
-const projects = await getCollection('projects');
-const notes = await getCollection('notes');
 
-// 关键数字
-const stats = [
-  { value: '15', unit: '年', label: '技术架构经验' },
-  { value: '39', unit: '亿', label: '月 Token 峰值' },
-  { value: `${projects.length}`, unit: '个', label: '代表项目案例' },
-];
 
 // 职业阶段 - 基于真实经历,电影时间线
 const journey = [
@@ -102,9 +95,8 @@ const focus = [
 
 <BaseLayout title="关于我">
   <!-- 长版自我介绍 -->
-  <section class="border-b border-[var(--color-border)] bg-white">
+  <section class="page-intro border-b border-[var(--color-border)] bg-white">
     <div class="mx-auto max-w-3xl px-6 py-16 sm:py-20">
-      <p class="chapter-label">CHARACTER PROFILE</p>
       <h1 class="mt-3 text-3xl sm:text-4xl">关于我</h1>
       <p class="mt-3 text-lg text-[var(--color-accent)]" style="letter-spacing: 0.04em">
         现任超大型多元化集团 · 高级研发总监 · 架构师
@@ -114,28 +106,15 @@ const focus = [
           我是{`袁飞扬`},集团总部高级架构师、数智化与 AI 条线 AI 产品与技术部门负责人,集团 AI 能力中枢、企业级智能体平台、统一 AI 入口等技术平台的技术出品人,负责集团 AI 战略规划、产品建设与工程化落地。
         </p>
         <p>
-          15 年技术架构经验,长期深耕人工智能、云原生、微服务架构及企业级平台建设。现阶段重点关注 Agentic Agent 方向,探索其在企业知识、业务流程和智能协同场景中的应用落地。
+          15 年技术架构经验,长期深耕人工智能、云原生、微服务架构及企业级平台建设。现阶段重点探索能调用工具、编排任务并与人协作的企业智能体，关注它们在知识处理和业务流程中的实际应用。
         </p>
         <p>
           我关心的从来不是"AI 能做什么",而是"AI 在什么条件下,才真的能被一个组织用起来"。
         </p>
       </div>
 
-      <!-- 关键数字 -->
-      <div class="mt-10 grid grid-cols-3 gap-4 border-t border-[var(--color-border)] pt-8">
-        {stats.map((s) => (
-          <div>
-            <p class="text-3xl font-bold tracking-tight text-[var(--color-primary)] tabular-nums" style="font-family: var(--font-display)">
-              {s.value}<span class="ml-0.5 text-base font-medium text-[var(--color-muted)]" style="font-family: var(--font-sans)">{s.unit}</span>
-            </p>
-            <p class="mt-1 text-sm text-[var(--color-muted)]">{s.label}</p>
-          </div>
-        ))}
-      </div>
-
       <!-- 职业阶段时间线 -->
       <div class="mt-12">
-        <p class="chapter-label mb-3">CAREER PATH</p>
         <h2 class="text-xl">职业路径</h2>
         <ol class="mt-6 space-y-0">
           {journey.map((j, i) => (
@@ -154,7 +133,7 @@ const focus = [
               >
               </span>
               <div>
-                <span class="inline-block rounded-full bg-[var(--color-accent)]/10 px-2.5 py-0.5 text-xs font-medium text-[var(--color-accent)]">
+                <span class="inline-block rounded-lg bg-[var(--color-accent)]/10 px-2.5 py-0.5 text-xs font-medium text-[var(--color-accent)]">
                   {j.phase}
                 </span>
                 <h3 class="mt-2 text-base">{j.title}</h3>
@@ -169,28 +148,8 @@ const focus = [
 
   <!-- 能力地图 -->
   <Section chapter="ABILITY MAP" title="能力地图" subtitle="六个方向,从技术深度到组织协作。">
-    <div class="overflow-x-auto rounded-xl border border-[var(--color-border)] bg-white">
-      <table class="w-full text-left text-sm">
-        <thead class="border-b border-[var(--color-border)] bg-[var(--color-bg)]">
-          <tr>
-            <th class="px-4 py-3 font-medium text-[var(--color-primary)]">能力方向</th>
-            <th class="px-4 py-3 font-medium text-[var(--color-primary)]">具体内容</th>
-            <th class="hidden px-4 py-3 font-medium text-[var(--color-primary)] sm:table-cell">网站表达方向</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-[var(--color-border)]">
-          {abilityMap.map((row) => (
-            <tr>
-              <td class="whitespace-nowrap px-4 py-3 font-medium text-[var(--color-primary)]">
-                {row.direction}
-              </td>
-              <td class="px-4 py-3 text-[var(--color-muted)]">{row.detail}</td>
-              <td class="hidden px-4 py-3 text-[var(--color-muted)] sm:table-cell">{row.expression}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <div class="space-y-6">{abilityMap.map(row => <div class="border-b border-[var(--color-border)] pb-5"><h3 class="text-lg">{row.direction}</h3><p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">{row.detail}</p><p class="mt-2 leading-relaxed">{row.expression}</p></div>)}</div>
+    <a href={url('/projects')} class="mt-5 inline-flex min-h-11 items-center">查看这些能力对应的项目案例 →</a>
   </Section>
 
   <!-- 工作方法与价值观 -->
@@ -210,10 +169,11 @@ const focus = [
     <ul class="space-y-3">
       {focus.map((f) => (
         <li class="flex items-start gap-3 text-[var(--color-text)]">
-          <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-accent)]"></span>
+          <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-lg bg-[var(--color-accent)]"></span>
           <span>{f}</span>
         </li>
       ))}
     </ul>
   </Section>
+<div class="mx-auto w-full max-w-3xl px-6 pb-16"><ContactCTA /></div>
 </BaseLayout>

@@ -11,7 +11,7 @@ pnpm install
 pnpm dev
 ```
 
-访问 `http://localhost:4321/finn-site`
+访问 `http://localhost:4321/`。
 
 ## 构建
 
@@ -20,6 +20,18 @@ pnpm build
 ```
 
 输出到 `dist/`。
+
+## 验证与预览
+
+```bash
+pnpm build
+python3 scripts/verify_site.py
+pnpm preview
+```
+
+验证脚本检查页面标题层级、导航状态、联系入口、内部链接与锚点，以及项目和文章的关联关系。浏览器交互与移动端布局仍需在预览中检查。
+
+本轮内容组织与结构调整的对应清单、验证记录及待补充资料见 [网站改进记录](docs/site-improvements.md)。
 
 ## 部署
 

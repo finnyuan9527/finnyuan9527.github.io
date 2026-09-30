@@ -8,7 +8,7 @@ interface Props {
 const { title, description, tags = [] } = Astro.props;
 ---
 
-<div class="group relative overflow-hidden rounded-xl border border-[var(--color-border)] bg-white p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[rgb(168_112_58/0.08)]">
+<div class="group relative overflow-hidden rounded-xl border border-[var(--color-border)] bg-white p-6 transition-colors hover:border-[var(--color-accent)]">
   <span
     aria-hidden="true"
     class="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] transition-transform duration-300 group-hover:scale-x-100"
@@ -18,7 +18,7 @@ const { title, description, tags = [] } = Astro.props;
   {tags.length > 0 && (
     <div class="mt-4 flex flex-wrap gap-2">
       {tags.map((tag) => (
-        <span class="rounded-full bg-[var(--color-accent)]/10 px-3 py-1 text-xs font-medium text-[var(--color-accent)]">
+        <span class="rounded-lg bg-[var(--color-accent)]/10 px-3 py-1 text-xs font-medium text-[var(--color-accent)]">
           {tag}
         </span>
       ))}

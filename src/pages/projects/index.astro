@@ -2,84 +2,46 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
 import { categoryOptions } from '../../config/categories';
-
-const projects = (await getCollection('projects')).sort(
-  (a, b) => a.data.order - b.data.order
-);
+const projects = (await getCollection('projects')).sort((a,b) => a.data.order-b.data.order);
 ---
-
-<BaseLayout title="项目" description="AI 应用、AI 平台、企业系统与研发提效的真实项目案例。">
-  <section class="border-b border-[var(--color-border)] bg-white">
-    <div class="mx-auto max-w-3xl px-6 py-12 sm:py-16">
-      <p class="chapter-label">FILM LIBRARY</p>
-      <h1 class="mt-3 text-3xl sm:text-4xl">项目案例</h1>
-      <p class="mt-3 max-w-2xl text-[var(--color-muted)]">
-        从 AI 应用落地到平台建设,从企业系统集成到研发提效,用真实项目展示方法与结果。
-      </p>
+<BaseLayout title="项目案例" description="企业 AI 平台与治理、业务智能化、系统集成的项目案例，说明阶段、职责与公开结果。">
+  <section class="page-intro border-b border-[var(--color-border)] bg-white"><div class="project-index mx-auto max-w-3xl px-6 py-12"><h1 class="mt-3 text-3xl sm:text-4xl">项目案例</h1>
+    <p class="mt-3 leading-relaxed text-[var(--color-muted)]">按建设方向浏览，结合项目阶段、本人职责和结果判断经验是否适合你的问题。</p>
+  </div></section>
+  <div class="project-index mx-auto max-w-3xl px-6 py-8">
+    <div class="flex flex-wrap gap-2" id="project-filters" role="group" aria-label="按建设方向筛选项目">
+      {categoryOptions.map((cat,i) => <button type="button" data-category={cat.id} aria-pressed={i === 0 ? 'true' : 'false'} class="project-filter min-h-11 rounded-lg border border-[var(--color-border)] px-4 text-sm">{cat.label}</button>)}
     </div>
-  </section>
-
-  <div class="mx-auto max-w-3xl px-6 py-8">
-    <!-- 分类筛选 -->
-    <div class="mb-8 flex flex-wrap gap-2" id="project-filters">
-      {categoryOptions.map((cat, i) => (
-        <button
-          data-category={cat.id}
-          class:list={[
-            'rounded-full border px-4 py-1.5 text-sm transition-colors',
-            i === 0
-              ? 'border-[var(--color-primary)] bg-[var(--color-primary)] text-white'
-              : 'border-[var(--color-border)] text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]',
-          ]}
-        >
-          {cat.label}
-        </button>
-      ))}
-    </div>
-
-    <!-- 项目网格 -->
-    <div class="grid gap-4 sm:grid-cols-2" id="project-grid">
-      {projects.map((project) => (
-        <div data-category={project.data.category}>
-          <ProjectCard project={project} />
-        </div>
-      ))}
-    </div>
+    <noscript><p class="my-5 text-sm text-[var(--color-muted)]">以下展示全部项目。</p><style>#project-filters, #project-count { display: none; }</style></noscript>
+    <p id="project-count" class="my-5 text-sm text-[var(--color-muted)]" role="status" aria-live="polite" aria-atomic="true">全部：{projects.length} 个项目</p>
+    <div class="grid gap-4 sm:grid-cols-2" id="project-grid">{projects.map((project, i) => <div data-category={project.data.category} data-lead={projects.length > 1 && projects.length % 2 === 1 && i === 0 ? true : undefined}><ProjectCard project={project} wide={projects.length > 1 && projects.length % 2 === 1 && i === 0} /></div>)}</div>
+    <ContactCTA />
   </div>
 </BaseLayout>
-
+<style>.project-filter[aria-pressed="true"] { background: var(--color-primary); color: white; border-color: var(--color-primary); }</style>
 <script>
-  function initFilters() {
-    const buttons = document.querySelectorAll('#project-filters button');
-    const items = document.querySelectorAll('#project-grid > [data-category]');
-
-    buttons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const category = btn.getAttribute('data-category');
-
-        buttons.forEach((b) => {
-          b.classList.remove('border-[var(--color-primary)]', 'bg-[var(--color-primary)]', 'text-white');
-          b.classList.add('border-[var(--color-border)]', 'text-[var(--color-muted)]');
-        });
-        btn.classList.add('border-[var(--color-primary)]', 'bg-[var(--color-primary)]', 'text-white');
-        btn.classList.remove('border-[var(--color-border)]', 'text-[var(--color-muted)]');
-
-        items.forEach((item) => {
-          const itemCat = item.getAttribute('data-category');
-          if (category === 'all' || itemCat === category) {
-            item.style.display = '';
-          } else {
-            item.style.display = 'none';
-          }
-        });
-      });
-    });
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('#project-filters button'));
+  const items = Array.from(document.querySelectorAll<HTMLElement>('#project-grid > [data-category]'));
+  function applyFilter(requested: string, push = false) {
+    const category = buttons.some(btn => btn.dataset.category === requested) ? requested : 'all';
+    let count = 0;
+    buttons.forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.category === category)));
+    items.forEach(item => { item.hidden = category !== 'all' && item.dataset.category !== category; if (!item.hidden) count++; });
+    const firstVisible = items.find(item => !item.hidden);
+    items.forEach(item => { const lead = count > 1 && count % 2 === 1 && item === firstVisible; item.toggleAttribute("data-lead", lead); item.querySelector(".project-card")?.classList.toggle("project-card-wide", lead); });
+    const active = buttons.find(btn => btn.dataset.category === category);
+    const status = document.querySelector('#project-count');
+    if (status) status.textContent = `${active?.textContent?.trim()}：${count} 个项目`;
+    const current = new URL(location.href);
+    if (category === 'all') current.searchParams.delete('category'); else current.searchParams.set('category', category);
+    if (push && current.href !== location.href) history.pushState(null, '', current);
+    items.forEach(item => { const link = item.querySelector<HTMLAnchorElement>('[data-project-link]'); if (link) { const target = new URL(link.href); if (category === 'all') target.searchParams.delete('category'); else target.searchParams.set('category', category); link.href = target.href; } });
   }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initFilters);
-  } else {
-    initFilters();
-  }
+  buttons.forEach(btn => btn.addEventListener('click', () => applyFilter(btn.dataset.category || 'all', true)));
+  const restore = () => applyFilter(new URL(location.href).searchParams.get('category') || 'all');
+  window.addEventListener('popstate', restore);
+  window.addEventListener('pageshow', restore);
+  restore();
 </script>

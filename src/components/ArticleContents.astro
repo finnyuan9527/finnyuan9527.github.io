@@ -1,0 +1,14 @@
+---
+import type { MarkdownHeading } from 'astro';
+interface Props { headings: MarkdownHeading[]; }
+const { headings } = Astro.props;
+const sections = headings.filter(heading => heading.depth === 2);
+---
+{sections.length >= 5 && (
+  <nav aria-label="本文内容" class="my-6 rounded-lg border border-[var(--color-border)] bg-white px-5">
+    <details>
+      <summary class="min-h-11 cursor-pointer py-3 font-medium">本文内容 · 展开章节</summary>
+      <ul class="pb-4">{sections.map(heading => <li><a class="inline-flex min-h-11 items-center text-sm" href={`#${heading.slug}`}>{heading.text}</a></li>)}</ul>
+    </details>
+  </nav>
+)}

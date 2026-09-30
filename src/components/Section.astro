@@ -10,11 +10,11 @@ interface Props {
 const { title, subtitle, id, class: className, chapter } = Astro.props;
 ---
 
-<section id={id} class:list={['py-12 sm:py-16', className]}>
+<section id={id} class:list={['content-section py-12 sm:py-16', className]}>
   <div class="mx-auto max-w-3xl px-6">
     {title && (
       <div class="mb-8">
-        {chapter && <p class="chapter-label mb-3">{chapter}</p>}
+
         <h2 class="text-2xl sm:text-3xl">{title}</h2>
         {subtitle && <p class="mt-2 text-[var(--color-muted)]">{subtitle}</p>}
       </div>

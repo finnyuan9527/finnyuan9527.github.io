@@ -8,7 +8,7 @@ export async function GET(context) {
   );
 
   return rss({
-    title: `${site.name} · 思考`,
+    title: `${site.name} · 思考与观点`,
     description: site.description,
     site: context.site,
     items: notes.map((note) => ({

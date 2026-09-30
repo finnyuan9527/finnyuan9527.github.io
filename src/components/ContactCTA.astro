@@ -1,0 +1,6 @@
+---
+import { url } from '../config/site';
+interface Props { title?: string; description?: string; }
+const { title = '交流企业 AI 落地问题', description = '欢迎交流模型与平台治理、知识检索、业务流程和工程交付中的具体问题。' } = Astro.props;
+---
+<aside class="contact-panel" aria-label="交流与联系"><div><h2>{title}</h2><p>{description}</p></div><a href={url('/contact')} class="button-primary">联系我 <span aria-hidden="true">↗</span></a></aside>

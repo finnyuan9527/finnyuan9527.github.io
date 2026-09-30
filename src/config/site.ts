@@ -9,10 +9,11 @@ export const site = {
   email: 'finnyuan9527@gmail.com',
   github: 'https://github.com/finnyuan9527',
   nav: [
-    { label: '正片', href: '/' },
-    { label: '人物志', href: '/about' },
-    { label: '片库', href: '/projects' },
-    { label: '观点集', href: '/notes' },
+    { label: '首页', href: '/' },
+    { label: '项目案例', href: '/projects' },
+    { label: '思考与观点', href: '/notes' },
+    { label: '关于我', href: '/about' },
+    { label: '联系', href: '/contact' },
   ],
 } as const;
 

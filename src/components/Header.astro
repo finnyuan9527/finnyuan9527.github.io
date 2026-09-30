@@ -1,35 +1,27 @@
 ---
 import { site, url, stripBase } from '../config/site';
-
 const currentPath = stripBase(Astro.url.pathname);
-const isActive = (href: string) => {
-  if (href === '/') return currentPath === '/';
-  return currentPath === href || currentPath.startsWith(`${href}/`);
-};
+const isActive = (href: string) => href === '/' ? currentPath === '/' : currentPath === href || currentPath.startsWith(`${href}/`);
 ---
-
-<header id="top" class="sticky top-0 z-50 border-b border-[var(--color-accent)]/10 bg-[var(--color-bg)]/60 backdrop-blur-xl">
-  <nav class="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
-    <a href={url('/')} class="font-display text-lg font-bold tracking-tight text-[var(--color-primary)]">
-      {site.name}
-    </a>
-    <ul class="flex items-center gap-7 text-sm">
-      {site.nav.map((item) => (
-        <li>
-          <a
-            href={url(item.href)}
-            class:list={[
-              'relative transition-colors after:absolute after:inset-x-0 after:-bottom-1.5 after:h-0.5 after:origin-left after:rounded-full after:bg-[var(--color-accent)] after:transition-transform after:duration-300',
-              isActive(item.href)
-                ? 'font-medium text-[var(--color-accent)] after:scale-x-100'
-                : 'text-[var(--color-muted)] after:scale-x-0 hover:text-[var(--color-accent)] hover:after:scale-x-100',
-            ]}
-            style="letter-spacing: 0.0875em"
-          >
-            {item.label}
-          </a>
-        </li>
-      ))}
+<header id="top" class="site-header sticky top-0 border-b border-[var(--color-border)] bg-[var(--color-bg)]/95 ">
+  <nav aria-label="主导航" class="site-navigation mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-x-4 px-6 py-2">
+    <a href={url('/')} class="inline-flex min-h-11 items-center brand-signature text-lg font-bold text-[var(--color-primary)]">{site.name}</a>
+    <button id="nav-toggle" class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--color-border)] px-3 text-sm sm:hidden" aria-expanded="false" aria-controls="main-nav">菜单</button>
+    <ul id="main-nav" class="hidden w-full flex-col border-t border-[var(--color-border)] py-2 sm:flex sm:w-auto sm:flex-row sm:gap-3 sm:border-0 sm:py-0">
+      {site.nav.map(item => <li><a href={url(item.href)} aria-current={isActive(item.href) ? 'page' : undefined} class:list={['flex min-h-11 items-center rounded-md px-2 text-sm transition-colors hover:bg-[var(--color-accent)]/10', isActive(item.href) ? 'font-semibold text-[var(--color-accent)] underline underline-offset-8' : 'text-[var(--color-muted)]']}>{item.label}</a></li>)}
     </ul>
   </nav>
 </header>
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('#nav-toggle');
+  const menu = document.querySelector<HTMLElement>('#main-nav');
+  const close = () => { toggle?.setAttribute('aria-expanded', 'false'); menu?.classList.add('hidden'); };
+  toggle?.addEventListener('click', () => {
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!expanded));
+    menu?.classList.toggle('hidden', expanded);
+  });
+  document.addEventListener('keydown', event => { if (event.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') { close(); toggle.focus(); } });
+  document.addEventListener('click', event => { if (event.target instanceof Node && !document.querySelector('header')?.contains(event.target)) close(); });
+</script>
+<noscript><style>#main-nav { display: flex; } #nav-toggle { display: none; }</style></noscript>
