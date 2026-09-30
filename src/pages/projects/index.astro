@@ -6,9 +6,9 @@ import ContactCTA from '../../components/ContactCTA.astro';
 import { categoryOptions } from '../../config/categories';
 const projects = (await getCollection('projects')).sort((a,b) => a.data.order-b.data.order);
 ---
-<BaseLayout title="项目案例" description="企业 AI 平台与治理、业务智能化、系统集成的项目案例，说明阶段、职责与公开结果。">
-  <section class="page-intro border-b border-[var(--color-border)] bg-white"><div class="project-index mx-auto max-w-3xl px-6 py-12"><h1 class="mt-3 text-3xl sm:text-4xl">项目案例</h1>
-    <p class="mt-3 leading-relaxed text-[var(--color-muted)]">按建设方向浏览，结合项目阶段、本人职责和结果判断经验是否适合你的问题。</p>
+<BaseLayout title="实践与作品" description="从交易系统、公共服务平台到企业 AI 的实践与作品，分别说明时间、职责、交付进展与披露范围。">
+  <section class="page-intro border-b border-[var(--color-border)] bg-white"><div class="project-index mx-auto max-w-3xl px-6 py-12"><h1 class="mt-3 text-3xl sm:text-4xl">实践与作品</h1>
+    <p class="mt-3 leading-relaxed text-[var(--color-muted)]">有些工作已经走过，有些仍在生长。从业务系统到平台与 AI，我把其中几段经历放在这里，留下具体做过的事，也留下当时和后来的思考。</p>
   </div></section>
   <div class="project-index mx-auto max-w-3xl px-6 py-8">
     <div class="flex flex-wrap gap-2" id="project-filters" role="group" aria-label="按建设方向筛选项目">
@@ -20,7 +20,7 @@ const projects = (await getCollection('projects')).sort((a,b) => a.data.order-b.
     <ContactCTA />
   </div>
 </BaseLayout>
-<style>.project-filter[aria-pressed="true"] { background: var(--color-primary); color: white; border-color: var(--color-primary); }</style>
+
 <script>
   const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('#project-filters button'));
   const items = Array.from(document.querySelectorAll<HTMLElement>('#project-grid > [data-category]'));

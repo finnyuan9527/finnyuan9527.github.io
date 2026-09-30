@@ -6,6 +6,7 @@ const isActive = (href: string) => href === '/' ? currentPath === '/' : currentP
 <header id="top" class="site-header sticky top-0 border-b border-[var(--color-border)] bg-[var(--color-bg)]/95 ">
   <nav aria-label="主导航" class="site-navigation mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-x-4 px-6 py-2">
     <a href={url('/')} class="inline-flex min-h-11 items-center brand-signature text-lg font-bold text-[var(--color-primary)]">{site.name}</a>
+    <button id="theme-toggle" class="theme-toggle" aria-label="切换为日读模式" aria-pressed="false">日读</button>
     <button id="nav-toggle" class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--color-border)] px-3 text-sm sm:hidden" aria-expanded="false" aria-controls="main-nav">菜单</button>
     <ul id="main-nav" class="hidden w-full flex-col border-t border-[var(--color-border)] py-2 sm:flex sm:w-auto sm:flex-row sm:gap-3 sm:border-0 sm:py-0">
       {site.nav.map(item => <li><a href={url(item.href)} aria-current={isActive(item.href) ? 'page' : undefined} class:list={['flex min-h-11 items-center rounded-md px-2 text-sm transition-colors hover:bg-[var(--color-accent)]/10', isActive(item.href) ? 'font-semibold text-[var(--color-accent)] underline underline-offset-8' : 'text-[var(--color-muted)]']}>{item.label}</a></li>)}
@@ -13,6 +14,10 @@ const isActive = (href: string) => href === '/' ? currentPath === '/' : currentP
   </nav>
 </header>
 <script>
+  const themeButton = document.querySelector<HTMLButtonElement>('#theme-toggle');
+  const syncTheme = () => { const light = document.documentElement.dataset.theme === 'light'; if (themeButton) { themeButton.textContent = light ? '夜读' : '日读'; themeButton.setAttribute('aria-label', light ? '切换为夜读模式' : '切换为日读模式'); themeButton.setAttribute('aria-pressed', String(light)); } };
+  syncTheme();
+  themeButton?.addEventListener('click', () => { const theme = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light'; document.documentElement.dataset.theme = theme; try { localStorage.setItem('finn-theme', theme); } catch {} syncTheme(); });
   const toggle = document.querySelector<HTMLButtonElement>('#nav-toggle');
   const menu = document.querySelector<HTMLElement>('#main-nav');
   const close = () => { toggle?.setAttribute('aria-expanded', 'false'); menu?.classList.add('hidden'); };
@@ -23,5 +28,6 @@ const isActive = (href: string) => href === '/' ? currentPath === '/' : currentP
   });
   document.addEventListener('keydown', event => { if (event.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') { close(); toggle.focus(); } });
   document.addEventListener('click', event => { if (event.target instanceof Node && !document.querySelector('header')?.contains(event.target)) close(); });
+  document.querySelector('.site-header')?.setAttribute('data-nav-ready', 'true');
 </script>
-<noscript><style>#main-nav { display: flex; } #nav-toggle { display: none; }</style></noscript>
+<noscript><style>#main-nav { display: flex; } #nav-toggle, #theme-toggle { display: none; }</style></noscript>

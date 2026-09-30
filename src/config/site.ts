@@ -1,16 +1,16 @@
 export const site = {
   name: '袁飞扬',
   nameEn: 'Finn Yuan',
-  role: '集团总部高级架构师 · AI 产品与技术负责人',
+  role: '复星集团总部高级架构师',
   roleEn: 'AI Architecture & Digital Practice',
-  tagline: '把 AI 真正装进业务流程',
+  tagline: '把来路写下，向前走。',
   description:
-    '15 年技术架构,把 AI 从演示做到算得过账、守得住安全、进得了业务流程。集团 AI 能力中枢与智能体平台技术出品人。',
+    '袁飞扬，复星集团总部高级架构师。15 年研发与架构实践，覆盖交易系统、支付清结算、公共服务平台与企业 AI，贯通架构设计、核心开发、系统集成和上线交付。',
   email: 'finnyuan9527@gmail.com',
   github: 'https://github.com/finnyuan9527',
   nav: [
     { label: '首页', href: '/' },
-    { label: '项目案例', href: '/projects' },
+    { label: '实践与作品', href: '/projects' },
     { label: '思考与观点', href: '/notes' },
     { label: '关于我', href: '/about' },
     { label: '联系', href: '/contact' },

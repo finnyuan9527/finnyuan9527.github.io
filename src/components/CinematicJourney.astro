@@ -1,0 +1,72 @@
+---
+import { url } from '../config/site';
+interface Phase { period: string; title: string; body: string; image: string; alt: string; }
+interface Props { phases: Phase[]; }
+const { phases } = Astro.props;
+---
+<section class="cinematic-journey" aria-labelledby="journey-heading">
+  <div class="journey-frame site-container">
+    <div class="journey-heading"><h2 id="journey-heading">来路，仍在照亮前方</h2><a class="text-link journey-skip" href="#after-journey">跳过历程 ↓</a></div>
+    <div class="journey-panels">
+      {phases.map((phase,i) => <div class="journey-panel">
+        <figure><img src={url(phase.image)} srcset={`${url(phase.image.replace(".jpg", "-640.jpg"))} 640w, ${url(phase.image.replace(".jpg", "-1024.jpg"))} 1024w, ${url(phase.image)} 1536w`} sizes="(max-width: 767px) calc(100vw - 40px), 760px" alt={phase.alt} width="1536" height="864" loading="lazy" decoding="async" /></figure>
+        <div class="journey-copy"><p class="journey-period">0{i+1} / 03 <span>{phase.period}</span></p><h3>{phase.title}</h3><p>{phase.body}</p></div>
+      </div>)}
+    </div>
+  </div>
+</section>
+<script>
+  const root = document.querySelector<HTMLElement>('.cinematic-journey');
+  if (root) {
+    const panels = Array.from(root.querySelectorAll<HTMLElement>('.journey-panel'));
+    const reset = () => { root.classList.remove('journey-enhanced'); panels.forEach(p => { p.style.removeProperty('opacity'); p.style.removeProperty('transform'); }); };
+    async function enhance() {
+      const eligibility = window.matchMedia('(min-width: 1024px) and (min-height: 700px) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
+      if (!eligibility.matches) {
+        const retry = () => { if (eligibility.matches) { eligibility.removeEventListener('change', retry); enhance(); } };
+        eligibility.addEventListener('change', retry);
+        window.addEventListener('pagehide', () => eligibility.removeEventListener('change', retry), { once: true });
+        return;
+      }
+      try {
+        const [{ gsap }, { ScrollTrigger }] = await Promise.all([import('gsap'), import('gsap/ScrollTrigger')]);
+        gsap.registerPlugin(ScrollTrigger);
+        const mm = gsap.matchMedia();
+        mm.add('(min-width: 1024px) and (min-height: 700px) and (pointer: fine) and (prefers-reduced-motion: no-preference)', () => {
+          root!.classList.add('journey-enhanced');
+          gsap.set(panels.slice(1), { opacity: 0, y: 28 });
+          // The panels contain non-interactive text and images. Animate only their
+          // appearance so all chapters stay in the accessibility tree in DOM order.
+          const tl = gsap.timeline({ scrollTrigger: { trigger: root, start: 'top 76px', end: () => `+=${Math.round(innerHeight * 1.8)}`, pin: true, scrub: .6, invalidateOnRefresh: true } });
+          tl.to(panels[0], { opacity: 0, y: -20, duration: .2 }, .8).to(panels[1], { opacity: 1, y: 0, duration: .2 }, .8)
+            .to(panels[1], { opacity: 0, y: -20, duration: .2 }, 1.8).to(panels[2], { opacity: 1, y: 0, duration: .2 }, 1.8)
+            .to({}, { duration: 1 }, 2);
+          return reset;
+        });
+        window.addEventListener('pagehide', () => { mm.revert(); reset(); }, { once: true });
+        document.querySelector('.journey-skip')?.addEventListener('click', event => { event.preventDefault(); const next = document.querySelector<HTMLElement>('#after-journey'); next?.scrollIntoView(); next?.focus({ preventScroll: true }); });
+      } catch { reset(); }
+    }
+    enhance();
+  }
+</script>
+<style>
+ .cinematic-journey { border-top: 1px solid var(--color-border); background: var(--color-bg); }
+ .journey-frame { padding-block: 72px; }
+ .journey-heading { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 48px; }
+ .journey-heading h2 { font-size: 28px; }
+ .journey-panels { display: grid; gap: 64px; }
+ .journey-panel { display: grid; grid-template-columns: 1.45fr 1fr; gap: 72px; align-items: center; }
+ .journey-panel figure { margin: 0; }
+ .journey-panel img { display: block; width: 100%; aspect-ratio: 16/10; object-fit: cover; }
+ .journey-period { font-size: 11px; color: var(--color-accent); display: flex; gap: 28px; letter-spacing: .08em; }
+ .journey-copy h3 { font-size: clamp(28px,3vw,44px); line-height: 1.45; margin-top: 28px; }
+ .journey-copy > p:last-child { margin-top: 28px; font-size: 16px; line-height: 1.95; color: var(--color-muted); }
+ .journey-enhanced .journey-frame { height: calc(100svh - 76px); min-height: 600px; max-height: 1000px; display: flex; flex-direction: column; justify-content: center; padding-block: 36px; }
+ .journey-enhanced .journey-heading { margin-bottom: 32px; }
+ .journey-enhanced .journey-panels { position: relative; height: min(55vh,560px); }
+ .journey-enhanced .journey-panel { position: absolute; inset: 0; }
+ .journey-enhanced .journey-panel img { height: min(55vh,560px); }
+ @media(max-width: 1023px) { .journey-panel { gap: 32px; } .journey-copy h3 { font-size: 30px; } .journey-copy > p:last-child { font-size: 14px; } }
+ @media(max-width: 767px) { .journey-frame { padding-block: 56px; } .journey-heading { align-items: start; flex-direction: column; gap: 12px; margin-bottom: 28px; } .journey-heading h2 { font-size: 26px; } .journey-panel { grid-template-columns: 1fr; gap: 28px; } .journey-panels { gap: 56px; } .journey-copy h3 { font-size: 28px; margin-top: 18px; } .journey-copy > p:last-child { margin-top: 18px; font-size: 15px; } }
+</style>

@@ -2,15 +2,20 @@
 import type { CollectionEntry } from 'astro:content';
 import { categoryLabels } from '../config/categories';
 import { url } from '../config/site';
-interface Props { project: CollectionEntry<'projects'>; headingLevel?: 'h2' | 'h3'; wide?: boolean; }
-const { project, headingLevel: Heading = 'h2', wide = false } = Astro.props;
-const { title, tagline, category, stage, role, highlight, tags } = project.data;
+interface Props { project: CollectionEntry<'projects'>; headingLevel?: 'h2' | 'h3'; wide?: boolean; showCover?: boolean; compact?: boolean; }
+const { project, headingLevel: Heading = 'h2', wide = false, showCover = false, compact = false } = Astro.props;
+const { title, subtitle, tagline, category, stage, role, highlight, tags, period, cover, coverAlt } = project.data;
 ---
-<a href={url(`/projects/${project.id}`)} data-project-link class:list={['project-card group', { 'project-card-wide': wide }]}>
+<a href={url(`/projects/${project.id}`)} data-project-link class:list={['project-card group', { 'project-card-wide': wide, 'project-card-compact': compact, 'project-card-illustrated': showCover && cover }]}>
+  {showCover && cover && <img class="project-card-cover" src={url(cover)} srcset={cover.startsWith("/images/cinematic-") ? `${url(cover.replace(".jpg", "-640.jpg"))} 640w, ${url(cover.replace(".jpg", "-1024.jpg"))} 1024w, ${url(cover)} 1536w` : undefined} sizes="(max-width: 767px) calc(100vw - 40px), 720px" alt={coverAlt ?? ""} width="1536" height="864" loading="lazy" decoding="async" />}
+  <div class="project-card-body">
   <div class="project-card-meta"><span class="category-label">{categoryLabels[category]}</span><span class="project-stage">{stage}</span></div>
   <Heading class="project-card-title">{title}</Heading>
+  <p class="project-card-subtitle">{subtitle}</p>
+  <p class="project-card-period">{period}</p>
   <p class="project-card-tagline">{tagline}</p>
-  <div class="project-card-details"><p><span>我的职责</span>{role}</p><p><span>{stage === '阶段未披露' ? '设计目标' : '已记录结果'}</span>{highlight}</p></div>
-  <div class="project-card-tags">{tags.map(tag => <span>{tag}</span>)}</div>
+  {!compact && <div class="project-card-details"><p><span>我的职责</span>{role}</p><p><span>交付与进展</span>{highlight}</p></div>}
+  {!compact && <div class="project-card-tags">{tags.map(tag => <span>{tag}</span>)}</div>}
   <span class="project-card-link">查看案例 <span aria-hidden="true">↗</span></span>
+  </div>
 </a>

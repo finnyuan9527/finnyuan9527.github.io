@@ -10,24 +10,29 @@ import { url } from '../../config/site';
 export async function getStaticPaths() { return (await getCollection('projects')).map(project => ({ params: { slug: project.id }, props: { project } })); }
 const { project } = Astro.props;
 const { Content, headings } = await render(project);
-const { title, tagline, category, stage, scope, role, problem, approach, outcome, evidence, retrospective, relatedNotes } = project.data;
+const { title, subtitle, cover, coverAlt, tagline, category, stage, period, scope, role, outcome, evidence, retrospective, relatedNotes } = project.data;
 const notes = (await getCollection('notes')).filter(note => relatedNotes.includes(note.id));
 const others = (await getCollection('projects')).filter(p => p.id !== project.id).sort((a,b) => Number(b.data.category === category)-Number(a.data.category === category) || a.data.order-b.data.order).slice(0,2);
-const fields = [{label:'场景与范围',value:scope},{label:'我的职责',value:role},{label:'业务问题',value:problem},{label:'方案摘要',value:approach},{label:stage === '阶段未披露' ? '设计目标' : '已记录结果',value:outcome.replace('设计目标：','')}];
+const fields = [{label:'时间',value:period},{label:'我的角色',value:role},{label:'项目场景',value:scope}];
 ---
-<BaseLayout title={title} description={tagline}>
+<BaseLayout title={`${title}｜${subtitle}`} description={tagline}>
   <article class="article-page mx-auto max-w-3xl px-6 py-10 sm:py-12">
-    <a id="project-back" href={url('/projects')} class="inline-flex min-h-11 items-center text-sm">← 返回项目案例</a>
+    <a id="project-back" href={url('/projects')} class="inline-flex min-h-11 items-center text-sm">← 返回实践与作品</a>
     <div class="mt-4 flex flex-wrap gap-2 text-sm text-[var(--color-muted)]"><span>{categoryLabels[category]}</span><span>·</span><span>{stage}</span></div>
-    <h1 class="mt-4 text-3xl sm:text-4xl">{title}</h1><p class="mt-3 text-lg leading-relaxed text-[var(--color-muted)]">{tagline}</p>
+    <h1 class="mt-4 text-3xl sm:text-4xl">{title}</h1><p class="project-subtitle mt-3 text-base text-[var(--color-accent)]">{subtitle}</p><p class="mt-3 text-lg leading-relaxed text-[var(--color-muted)]">{tagline}</p>
+    {cover && <figure class="article-art"><img src={url(cover)} srcset={cover.startsWith("/images/cinematic-") ? `${url(cover.replace(".jpg", "-640.jpg"))} 640w, ${url(cover.replace(".jpg", "-1024.jpg"))} 1024w, ${url(cover)} 1536w` : undefined} sizes="(max-width: 767px) calc(100vw - 40px), 720px" alt={coverAlt ?? ""} width="1536" height="864" loading="lazy" decoding="async" /></figure>}
     <dl class="mt-8 grid gap-5 border-y border-[var(--color-border)] py-6">{fields.map(field => <div><dt class="font-medium">{field.label}</dt><dd class="mt-2 leading-relaxed text-[var(--color-text)]">{field.value}</dd></div>)}</dl>
-    <section class="mt-6 rounded-xl border border-[var(--color-border)] bg-white p-5" aria-labelledby="evidence-heading"><h2 id="evidence-heading" class="text-lg">结果口径与披露范围</h2><p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">{evidence}</p></section>
     <ArticleContents headings={headings} />
     <div class="mt-8"><Prose><Content /></Prose></div>
+    <section class="project-result mt-8 border-t border-[var(--color-border)] pt-6" aria-labelledby="evidence-heading">
+      <h2 id="evidence-heading" class="text-xl">交付与进展</h2>
+      <p class="mt-3 leading-relaxed">{outcome}</p>
+      <p class="mt-3 text-xs leading-relaxed text-[var(--color-muted)]">{evidence}</p>
+    </section>
     {retrospective && <section class="mt-8 border-t border-[var(--color-border)] pt-6"><h2 class="text-xl">复盘</h2><p class="mt-3 leading-relaxed">{retrospective}</p></section>}
     {notes.length > 0 && <section class="mt-10 border-t border-[var(--color-border)] pt-8"><h2 class="text-xl">相关方法与观点</h2><div class="mt-5 space-y-4">{notes.map(note => <NoteCard note={note} headingLevel="h3" />)}</div></section>}
-    <section class="mt-10"><h2 class="text-xl">继续查看项目案例</h2><ul class="mt-3">{others.map(p => <li><a class="inline-flex min-h-11 items-center" href={url(`/projects/${p.id}`)}>{p.data.title} →</a></li>)}</ul></section>
-    <ContactCTA title="交流这个案例中的问题" description="如果你也在处理类似的业务场景，欢迎带着目标、约束和当前阶段一起交流。" />
+    <section class="mt-10"><h2 class="text-xl">继续浏览作品</h2><ul class="mt-3">{others.map(p => <li><a class="inline-flex min-h-11 items-center" href={url(`/projects/${p.id}`)}>{p.data.title} →</a></li>)}</ul></section>
+    <ContactCTA title="聊聊这段实践" description="如果你对这段经历或其中的技术问题感兴趣，欢迎交流。" />
   </article>
 </BaseLayout>
 <script define:vars={{ allowedCategories: categoryOptions.map(c => c.id) }}>

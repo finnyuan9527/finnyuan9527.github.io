@@ -58,7 +58,7 @@ const dateStr = date.toLocaleDateString('zh-CN', {
         <Content />
       </Prose>
     </div>
-    {projects.length > 0 && <section class="mt-10 border-t border-[var(--color-border)] pt-8"><h2 class="text-xl">相关项目案例</h2><div class="mt-5 grid gap-4 sm:grid-cols-2">{projects.map((project, i) => <ProjectCard project={project} headingLevel="h3" wide={projects.length > 1 && projects.length % 2 === 1 && i === projects.length - 1} />)}</div></section>}
+    {projects.length > 0 && <section class="mt-10 border-t border-[var(--color-border)] pt-8"><h2 class="text-xl">相关项目案例</h2><div class="mt-5 grid gap-4 sm:grid-cols-2">{projects.map((project, i) => <ProjectCard project={project} headingLevel="h3" compact wide={projects.length > 1 && projects.length % 2 === 1 && i === projects.length - 1} />)}</div></section>}
     <section class="mt-10"><h2 class="text-xl">继续阅读</h2><ul class="mt-3">{otherNotes.map(n => <li><a class="inline-flex min-h-11 items-center" href={url(`/notes/${n.id}`)}>{n.data.title} →</a></li>)}</ul></section>
     <ContactCTA />
   </article>

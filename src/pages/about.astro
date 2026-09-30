@@ -3,177 +3,62 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Section from '../components/Section.astro';
 import ContactCTA from '../components/ContactCTA.astro';
 import { url } from '../config/site';
-
-
-
-// 职业阶段 - 基于真实经历,电影时间线
+import { career, careerGroups } from '../data/career';
 const journey = [
-  {
-    phase: '2012 · 北京',
-    title: '互联网核心系统',
-    body: '先后任职于多家在线旅游与文娱类互联网企业,参与订单、支付清结算、供应链等核心系统建设,建立工程化基础。',
-  },
-  {
-    phase: '2018 · 加入集团',
-    title: '企业平台与系统集成',
-    body: '进入超大型多元化集团 IT 共享中心,负责低代码平台、主数据、数据链路与跨系统集成。',
-  },
-  {
-    phase: '2024 · 转向 AI',
-    title: '企业级 AI 从 0 到 1',
-    body: '部署开源推理引擎,落地面向专业研发场景的知识平台、企业知识库 RAG 与外部客户 RAG 交付。',
-  },
-  {
-    phase: '2026 · 现在',
-    title: '集团 AI 产品与技术负责人',
-    body: '主导 AI 能力中枢、智能体平台、统一 AI 入口建设,牵头集团统一 AI 技术架构治理。',
-  },
+  ['2011-2018', '从业务系统起步', '从旅行、酒店与电影行业的订单、支付和清结算系统起步，逐步承担研发管理、公共组件与工程规范建设。'],
+  ['2018-2022', '走向平台与更广的业务', '进入复星多产业场景，建设通用服务开放平台，参与健康业务平台与跨产业系统集成，把项目能力沉淀为服务。'],
+  ['2023-2024', '在新工具里寻找可用的路径', '推进低代码平台选型、样板上线与培训；开展企业 AI 应用研发，贯通知识库、身份权限、云部署与客户验收。'],
+  ['2025-2026', '让 AI 走进日常工作', '持续推进智能助手与业务 AI 应用上线，参与模型运行和资源治理，并通过内测与试运行验证数字员工工作流。'],
 ];
-
-// 能力地图
-const abilityMap = [
-  {
-    direction: 'AI 架构与平台',
-    detail: '企业级 AI 平台、模型网关、模型接入、路由、权限、成本与稳定性治理',
-    expression: '让 AI 能力从单点试验走向统一平台和规模化使用',
-  },
-  {
-    direction: 'Agent 与 RAG',
-    detail: '智能体、知识库、检索增强、深度研究、文档解析、工作流编排',
-    expression: '把模型能力嵌入真实业务任务和知识流程',
-  },
-  {
-    direction: '企业数字化',
-    detail: '低代码、主数据、OA、协同办公平台、数据链路、系统集成与迁移',
-    expression: '理解企业复杂系统,并处理跨系统协同问题',
-  },
-  {
-    direction: '工程交付',
-    detail: '方案评审、架构设计、代码开发、测试、上线、监控、运维和故障处理',
-    expression: '拥有从概念到生产环境的完整交付能力',
-  },
-  {
-    direction: '业务协作',
-    detail: '与 HR、财务、业务条线、供应商和技术团队共同推进项目',
-    expression: '把技术语言转译为业务目标、验收标准和可执行计划',
-  },
-  {
-    direction: '技术赋能',
-    detail: '内部培训、技术分享、工具推广和 AI 使用方法总结',
-    expression: '帮助团队从工具使用走向能力建设',
-  },
+const abilities = [
+  ['业务与系统架构', '把订单、支付和履约等复杂流程拆成清晰模型，处理状态流转、跨系统一致性与服务边界。', 'transaction-order-systems'],
+  ['平台与云工程', '将多个业务共有的需求沉淀为平台服务，连接接入入口、身份授权、运行环境和监控保障。', 'shared-service-platform'],
+  ['企业 AI 工程', '贯通模型部署、文档与知识处理、检索服务和应用开发，让 AI 进入企业知识与工作场景。', 'pharma-knowledge-services'],
+  ['系统集成与数据协同', '连接渠道、企业身份和主数据链路，在新旧系统接入与迁移中兼顾业务连续性。', 'enterprise-system-integration'],
+  ['团队与项目交付', '通过需求评审、任务拆分、技术指导和跨方协同推进交付，并用文档、培训支持团队持续使用。', 'low-code-business-platform'],
+  ['运行与资源治理', '上线后持续处理故障、升级与迁移，关注模型用量、权限和资源，让应用具备持续运营条件。', 'model-routing-gateway'],
 ];
-
-// 工作方法与价值观
 const values = [
-  {
-    title: '从验证开始,而不是从想象开始',
-    body: '在 AI 项目中倾向于先做小规模 POC,再通过 MVP、增量迭代和规模化逐步推进,并为每个阶段设置可量化的验收标准。',
-  },
-  {
-    title: '从技术走到业务现场',
-    body: '不把 AI 描述成孤立的模型能力,而是把它放进数据、系统、流程、权限、成本和组织协作中考察。',
-  },
-  {
-    title: '既追求前沿,也重视边界',
-    body: '认可 AI 在方案文档、会议纪要、编码辅助、内容检索等场景中的价值,同时明确重大决策、关系维护和组织影响力建设不能简单交给 AI。',
-  },
-  {
-    title: '对稳定性和长期运营负责',
-    body: '从系统迁移、故障处理、监控、安全治理到平台成本,关注"上线之后是否能稳定运行",而不止是新技术体验。',
-  },
-];
-
-// 当前关注问题
-const focus = [
-  '企业级 AI 平台的统一治理与规模化运营',
-  'Agent 与工作流编排如何重构企业协作方式',
-  'RAG 与知识库在企业复杂场景中的落地边界',
-  'AI 工具链对研发提效的真实影响与使用边界',
+  ['先听懂问题', '从签证订单、财务结算到处方流转，我习惯先找出流程断点，再把问题拆成清晰的业务模型和系统方案。'],
+  ['把方案写进代码', '架构设计需要落到可运行的系统。健康平台、智能助手与招聘助手的经历，让我持续参与核心编码、联调和交付。'],
+  ['把经验留下来', '从基础组件、通用开放平台到低代码方法论，我持续沉淀公共能力、接入文档和研发规范，降低后续项目的重复建设。'],
+  ['上线之后，继续照看', '从知识库客户验收到智能助手上线，再到迁移与故障处置，我持续参与交付和运行中的具体工作。'],
+  ['和人一起把事情做好', '带领基础服务和平台团队时，我参与任务拆分、技术指导与培训；在客户交付和产业接入中，也持续与业务方和供应商协作。'],
 ];
 ---
-
-<BaseLayout title="关于我">
-  <!-- 长版自我介绍 -->
+<BaseLayout title="关于我" description="袁飞扬，复星集团总部高级架构师。完整呈现 2011-2026 年业务系统、平台工程与企业 AI 经历，以及项目职责和交付阶段。">
   <section class="page-intro border-b border-[var(--color-border)] bg-white">
     <div class="mx-auto max-w-3xl px-6 py-16 sm:py-20">
-      <h1 class="mt-3 text-3xl sm:text-4xl">关于我</h1>
-      <p class="mt-3 text-lg text-[var(--color-accent)]" style="letter-spacing: 0.04em">
-        现任超大型多元化集团 · 高级研发总监 · 架构师
-      </p>
-      <div class="mt-6 space-y-4 text-base leading-relaxed text-[var(--color-text)]">
-        <p>
-          我是{`袁飞扬`},集团总部高级架构师、数智化与 AI 条线 AI 产品与技术部门负责人,集团 AI 能力中枢、企业级智能体平台、统一 AI 入口等技术平台的技术出品人,负责集团 AI 战略规划、产品建设与工程化落地。
-        </p>
-        <p>
-          15 年技术架构经验,长期深耕人工智能、云原生、微服务架构及企业级平台建设。现阶段重点探索能调用工具、编排任务并与人协作的企业智能体，关注它们在知识处理和业务流程中的实际应用。
-        </p>
-        <p>
-          我关心的从来不是"AI 能做什么",而是"AI 在什么条件下,才真的能被一个组织用起来"。
-        </p>
+      <h1 class="text-3xl sm:text-4xl">关于我</h1>
+      <p class="mt-4 text-lg text-[var(--color-accent)]">复星集团总部高级架构师 · 企业数智化与 AI</p>
+      <div class="mt-6 space-y-4 leading-relaxed">
+        <p>我是袁飞扬，目前在复星集团总部数智化与 AI 条线做架构与研发。工作中，我参与系统设计，也继续做核心开发、联调和交付。</p>
+        <p>从 2011 年开始，我的工作经过旅行、酒店与电影行业，围绕订单、支付和清结算展开。后来，我走进多产业集团，建设公共服务和数字化平台，再逐渐把重心放到企业 AI。回头看，这些经历之间有一条连着的线：理解业务，把问题拆清楚，让系统在真实工作中发挥作用。</p>
+        <p>有些记忆很具体。2020 年，我们打通健康业务中从处方到药店的链路，完成线上全流程测试，并实际收到了药品。系统里的流程走到了现实生活里，这样的节点让我更清楚自己为什么做这些工作。</p>
+        <p>做这个站，也是一次重新梳理自己的过程。给已经走过的阶段一个交代，向过去挥挥手，再把目光放到前面。下一段路会怎样，我愿意留一些空白，继续学习，也继续做事。</p>
       </div>
-
-      <!-- 职业阶段时间线 -->
-      <div class="mt-12">
-        <h2 class="text-xl">职业路径</h2>
-        <ol class="mt-6 space-y-0">
-          {journey.map((j, i) => (
-            <li class="relative flex gap-5 pb-8 last:pb-0">
-              {i < journey.length - 1 && (
-                <span aria-hidden="true" class="absolute left-[7px] top-5 h-full w-px bg-[var(--color-border)]"></span>
-              )}
-              <span
-                aria-hidden="true"
-                class:list={[
-                  'relative mt-1.5 h-[15px] w-[15px] shrink-0 rounded-full border-2',
-                  i === journey.length - 1
-                    ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/20'
-                    : 'border-[var(--color-border)] bg-white',
-                ]}
-              >
-              </span>
-              <div>
-                <span class="inline-block rounded-lg bg-[var(--color-accent)]/10 px-2.5 py-0.5 text-xs font-medium text-[var(--color-accent)]">
-                  {j.phase}
-                </span>
-                <h3 class="mt-2 text-base">{j.title}</h3>
-                <p class="mt-1 text-sm leading-relaxed text-[var(--color-muted)]">{j.body}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </div>
+      <nav aria-label="关于页面目录" class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm"><a class="inline-flex min-h-11 items-center" href="#journey">职业路径 ↓</a><a class="inline-flex min-h-11 items-center" href="#abilities">核心能力 ↓</a><a class="inline-flex min-h-11 items-center" href="#working-style">工作方式 ↓</a><a class="inline-flex min-h-11 items-center" href="#career">项目时间线 ↓</a></nav>
     </div>
   </section>
-
-  <!-- 能力地图 -->
-  <Section chapter="ABILITY MAP" title="能力地图" subtitle="六个方向,从技术深度到组织协作。">
-    <div class="space-y-6">{abilityMap.map(row => <div class="border-b border-[var(--color-border)] pb-5"><h3 class="text-lg">{row.direction}</h3><p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">{row.detail}</p><p class="mt-2 leading-relaxed">{row.expression}</p></div>)}</div>
-    <a href={url('/projects')} class="mt-5 inline-flex min-h-11 items-center">查看这些能力对应的项目案例 →</a>
+  <Section id="journey" title="回看来路" subtitle="每一段工作，都留下了下一段路会用到的东西。">
+    <figure class="chapter-art"><img src={url('/images/cinematic-layers.jpg')} srcset={`${url("/images/cinematic-layers-640.jpg")} 640w, ${url("/images/cinematic-layers-1024.jpg")} 1024w, ${url("/images/cinematic-layers.jpg")} 1536w`} sizes="(max-width: 767px) calc(100vw - 48px), 720px" alt="层叠的石墨金属与烟灰玻璃向深处延伸" width="1536" height="864" loading="lazy" decoding="async" /><figcaption>回望，是为了继续出发。</figcaption></figure>
+    <ol class="space-y-8">{journey.map(([period,title,body]) => <li class="border-l-2 border-[var(--color-border)] pl-5"><p class="text-sm text-[var(--color-accent)]">{period}</p><h3 class="mt-2 text-lg">{title}</h3><p class="mt-2 leading-relaxed text-[var(--color-muted)]">{body}</p></li>)}</ol>
   </Section>
 
-  <!-- 工作方法与价值观 -->
-  <Section chapter="METHODOLOGY & VALUES" title="工作方法与价值观">
-    <div class="space-y-6">
-      {values.map((v, i) => (
-        <div class="rounded-xl border border-[var(--color-border)] bg-white p-6">
-          <h3 class="text-lg">{v.title}</h3>
-          <p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">{v.body}</p>
-        </div>
-      ))}
-    </div>
+  <Section id="working-style" title="我一直在意的事"><div class="space-y-6">{values.map(([title,body]) => <div><h3 class="text-lg">{title}</h3><p class="mt-2 leading-relaxed text-[var(--color-muted)]">{body}</p></div>)}</div></Section>
+  <Section id="abilities" title="从经历里长出的能力" subtitle="把问题解决过，才慢慢知道自己能承担什么。">
+    <div class="space-y-6">{abilities.map(([title,body,slug]) => <div class="border-b border-[var(--color-border)] pb-5"><h3 class="text-lg">{title}</h3><p class="mt-2 leading-relaxed text-[var(--color-muted)]">{body}</p><a class="mt-2 inline-flex min-h-11 items-center text-sm" href={url(`/projects/${slug}`)}>查看对应案例 →</a></div>)}</div>
   </Section>
 
-  <!-- 当前关注问题 -->
-  <Section chapter="CURRENT FOCUS" title="当前关注" subtitle="正在思考和推进的问题。">
-    <ul class="space-y-3">
-      {focus.map((f) => (
-        <li class="flex items-start gap-3 text-[var(--color-text)]">
-          <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-lg bg-[var(--color-accent)]"></span>
-          <span>{f}</span>
-        </li>
-      ))}
-    </ul>
+  <Section title="下一段路，还在展开" subtitle="带着已有的积累，也保留对新事物的好奇。">
+    <figure class="chapter-art chapter-art-future"><img src={url('/images/cinematic-horizon.jpg')} srcset={`${url("/images/cinematic-horizon-640.jpg")} 640w, ${url("/images/cinematic-horizon-1024.jpg")} 1024w, ${url("/images/cinematic-horizon.jpg")} 1536w`} sizes="(max-width: 767px) calc(100vw - 48px), 720px" alt="深灰金属空间向柔和的暖色光线敞开" width="1536" height="864" loading="lazy" decoding="async" /><figcaption>未写完的地方，还可以继续生长。</figcaption></figure>
+    <p class="leading-relaxed">现在，我更关注 AI 如何进入真实工作：从理解资料到连接系统，再到完成一件具体的事。数字员工的内测与试运行，让这种探索开始接触真实流程和使用反馈。</p>
+    <p class="mt-4 leading-relaxed text-[var(--color-muted)]">我希望继续把新能力做成可用的系统，也把过程中的判断写下来。技术会向前走，我也愿意在实践中继续调整自己的方向。</p>
+    <a class="mt-4 inline-flex min-h-11 items-center" href={url('/notes/writing-the-road-ahead')}>读：写下来路，留白给下一程 →</a>
   </Section>
-<div class="mx-auto w-full max-w-3xl px-6 pb-16"><ContactCTA /></div>
+  <Section id="career" title="一路走来的项目" subtitle="按项目开始阶段分组。并行项目分别呈现，持续建设与迭代在节点内说明。">
+    <p class="mb-6 text-sm leading-relaxed text-[var(--color-muted)]">整理截至 2026 年 9 月 30 日。客户、产业项目及内部产品名称已适当脱敏，保留实际职责与交付阶段。展开任一阶段查看具体经历。</p>
+    <div class="space-y-4">{careerGroups.map((group,i) => <details class="career-group rounded-xl border border-[var(--color-border)] bg-white" ><summary class="cursor-pointer px-5 py-5"><h3 class="inline text-lg">{group}</h3><span class="ml-2 text-sm text-[var(--color-muted)]">{career.filter(item => item.group===i).length} 个节点</span></summary><ol class="space-y-7 px-5 pb-6">{career.filter(item => item.group===i).map(item => <li class="border-t border-[var(--color-border)] pt-5"><p class="text-sm text-[var(--color-accent)]">{item.period} · {item.org}</p><h4 class="mt-2 text-base">{item.title}</h4><p class="mt-1 text-sm text-[var(--color-accent)]">{item.subtitle}</p><p class="mt-2 text-sm font-medium">{item.role}</p><p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">{item.body}</p>{item.href && <a href={url(item.href)} class="mt-2 inline-flex min-h-11 items-center text-sm">查看代表案例 →</a>}</li>)}</ol></details>)}</div>
+  </Section>
+  <div class="mx-auto max-w-3xl px-6 pb-16"><ContactCTA /></div>
 </BaseLayout>

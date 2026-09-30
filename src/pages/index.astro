@@ -4,45 +4,62 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import NoteCard from '../components/NoteCard.astro';
 import ContactCTA from '../components/ContactCTA.astro';
+import CinematicJourney from '../components/CinematicJourney.astro';
 import { site, url } from '../config/site';
 const projects = (await getCollection('projects')).filter(p => p.data.featured).sort((a,b) => a.data.order-b.data.order).slice(0,3);
-const notes = (await getCollection('notes')).sort((a,b) => b.data.date.getTime()-a.data.date.getTime()).slice(0,2);
+const notes = (await getCollection('notes')).sort((a,b) => Number(b.id === 'writing-the-road-ahead') - Number(a.id === 'writing-the-road-ahead') || b.data.date.getTime()-a.data.date.getTime() || a.id.localeCompare(b.id)).slice(0,2);
 const abilities = [
-  { title: 'AI 平台与治理', body: '统一模型接入、任务路由、权限与成本归因，让分散的 AI 调用可以持续运营。', href: '/projects/model-routing-gateway', label: '查看模型网关案例' },
-  { title: '知识与业务智能化', body: '评估知识检索、智能体和任务编排，把模型能力放进有数据、有权限、有人负责的业务环节。', href: '/projects/enterprise-rag-knowledge', label: '查看知识库选型案例' },
-  { title: '企业系统与工程交付', body: '梳理主数据、系统依赖与迁移边界，分阶段打通数据链路，保障业务连续性。', href: '/projects/enterprise-system-integration', label: '查看系统集成案例' },
+  { title: '业务系统与真实闭环', body: '从复杂订单、支付清结算到健康处方流转，围绕业务断点建模，贯通跨系统流程。', href: '/projects/healthcare-service-platform', label: '查看健康业务闭环' },
+  { title: '平台工程与服务复用', body: '建设公共组件、开放平台与低代码运行环境，把单个项目需求沉淀为可复用服务。', href: '/projects/shared-service-platform', label: '查看开放平台建设' },
+  { title: '企业 AI 与持续运营', body: '连接知识检索、模型服务与企业工作流，同时考虑部署、权限、用量和稳定运行。', href: '/projects/model-routing-gateway', label: '查看 AI 运行治理' },
 ];
 ---
 
 <BaseLayout>
   <section class="home-hero">
+    <figure class="hero-visual">
+      <img src={url("/images/cinematic-horizon.jpg")} srcset={`${url("/images/cinematic-horizon-640.jpg")} 640w, ${url("/images/cinematic-horizon-1024.jpg")} 1024w, ${url("/images/cinematic-horizon.jpg")} 1536w`} sizes="100vw" alt="深灰金属空间向右侧柔和的暖色光线敞开" width="1536" height="864" fetchpriority="high" />
+      <figcaption>留白，给下一程</figcaption>
+    </figure>
     <div class="site-container hero-layout">
       <div class="hero-copy">
         <h1 class="signature">{site.name}</h1>
         <p class="hero-role">{site.role}</p>
-        <p class="hero-message"><strong class="hero-statement">让 AI 真正进入业务流程。</strong><span class="hero-description">15 年技术架构经验，连接企业 AI 平台、知识与业务，从方案验证到工程交付。</span></p>
-        <div class="hero-actions"><a href={url('/projects')} class="button-primary">查看项目案例 <span aria-hidden="true">↗</span></a><a href={url('/contact')} class="button-secondary">联系我</a></div>
+        <p class="hero-message"><strong class="hero-statement">把来路写下，向前走。</strong><span class="hero-description">十五年，从业务系统走向企业 AI。
+这里收下来路，也留白给未来。</span></p>
+        <div class="hero-actions"><a href={url('/about')} class="button-primary">了解我 <span aria-hidden="true">↗</span></a><a href={url('/projects')} class="button-secondary">浏览作品</a></div>
       </div>
-      <figure class="hero-visual">
-        <img src={url('/images/abstract-ink-hero.webp')} alt="暖白纸面上石墨色弧形笔触、灰色墨迹与少量铜色构成的抽象画" width="1536" height="1024" fetchpriority="high" />
-        <figcaption>留白与张力 <span>AI 生成抽象作品</span></figcaption>
-      </figure>
+
     </div>
   </section>
+  <CinematicJourney phases={[
+    { period: "2011-2018", title: "在纷繁中，理清脉络", body: "从旅行、酒店到电影行业，订单、支付与清结算是最初的课堂。我在具体业务里学习，也逐渐学会带领团队，把复杂的问题一件件做清楚。", image: "/images/cinematic-layers.jpg", alt: "层叠的石墨金属与烟灰玻璃向深处延伸" },
+    { period: "2018-2022", title: "让一段路，连接更多人", body: "走进复星多产业场景，从公共服务到健康业务平台。我开始把单个项目里的经验留下来，让能力成为服务，让不同系统之间的路更通畅。", image: "/images/cinematic-connections.jpg", alt: "交错的烟灰玻璃折射出细微的暖色光线" },
+    { period: "2023-2026", title: "带着来路，走向未知", body: "从低代码到企业 AI，继续亲手开发，也继续探索新的工作方式。智能助手已经进入真实业务，数字员工仍在内测与试运行；下一段路，在实践中展开。", image: "/images/cinematic-horizon.jpg", alt: "深灰空间中一束暖光照向尚未展开的远处" },
+  ]} />
+  <section id="after-journey" tabindex="-1" class="home-profile site-container">
+    <div class="profile-title"><h2>关于我</h2><p>一个仍在路上的工程师</p></div>
+    <div class="profile-copy"><p>我是袁飞扬，在复星集团总部做架构与研发，也持续亲手写代码。工作从旅行、酒店和电影行业的交易系统开始，后来走进集团平台与企业 AI。技术在变，我仍然在意那些具体的问题，以及它们最终有没有得到解决。</p><p>重新梳理这些经历时，我也在重新认识自己。把来路写下，给过去一个交代；把眼光放远，继续迎接尚未发生的事。</p><a href={url('/about')} class="text-link">读读我的故事 <span aria-hidden="true">↗</span></a></div>
+  </section>
   <section class="home-work site-container">
-    <div class="section-heading"><div><h2>精选项目</h2><p>具体问题、承担的职责与公开结果。</p></div><a href={url('/projects')} class="text-link">全部项目案例 <span aria-hidden="true">↗</span></a></div>
-    <div class="featured-projects">{projects.map(project => <ProjectCard project={project} headingLevel="h3" />)}</div>
+    <div class="section-heading"><div><h2>一路做过的事</h2><p>选几段留下印记的经历，讲讲当时的问题、我做的工作，以及后来留下的思考。</p></div><a href={url('/projects')} class="text-link">更多实践与作品 <span aria-hidden="true">↗</span></a></div>
+    <div class="featured-projects">{projects.map((project,i) => <ProjectCard project={project} headingLevel="h3" showCover compact={i > 0} />)}</div>
   </section>
   <section class="home-capabilities site-container">
-    <div class="section-heading"><div><h2>从技术架构，到业务现场</h2><p>关注模型之外的数据、流程、权限与长期运营。</p></div></div>
+    <div class="section-heading"><div><h2>这些年，逐渐积累的能力</h2><p>从具体问题里学来的东西，最终又回到具体的工作中。</p></div></div>
     <div class="capability-list">{abilities.map(item => <div class="capability-row"><h3>{item.title}</h3><p>{item.body}</p><a href={url(item.href)} class="text-link">{item.label}<span aria-hidden="true">↗</span></a></div>)}</div>
   </section>
-  <section class="home-profile site-container">
-    <div class="profile-title"><h2>关于我</h2><p>架构、产品与工程</p></div>
-    <div class="profile-copy"><p>我在集团总部负责 AI 产品与技术工作，经历过互联网核心系统、企业平台与系统集成，如今重点探索企业智能体与 AI 平台的落地。</p><p>我关心的不只是系统如何建成，也包括它上线之后如何被组织用起来。</p><a href={url('/about')} class="text-link">了解职业经历与工作方法 <span aria-hidden="true">↗</span></a></div>
+
+  <section class="home-methods site-container" aria-labelledby="methods-heading">
+    <div class="section-heading"><div><h2 id="methods-heading">一些不变的习惯</h2><p>做过的事会成为经历，也会慢慢形成一个人的样子。</p></div><a href={url('/about#working-style')} class="text-link">了解我的工作方式 <span aria-hidden="true">↗</span></a></div>
+    <div class="working-principles">
+      <div><h3>先听懂问题</h3><p>从订单到处方流转，我习惯先理解流程和其中的人，再找到真正需要解决的地方。</p></div>
+      <div><h3>把方案写进代码</h3><p>设计之后，继续亲手开发与联调。想法在代码里接受检验，也在使用中慢慢变得扎实。</p></div>
+      <div><h3>把经验留下来</h3><p>把走过的路整理成服务、文档和方法，让下一次出发能够从已有的积累开始。</p></div>
+    </div>
   </section>
   <section class="home-notes site-container">
-    <div class="section-heading"><div><h2>思考与观点</h2><p>从实践中整理方法、验证清单与使用边界。</p></div><a href={url('/notes')} class="text-link">全部文章 <span aria-hidden="true">↗</span></a></div>
+    <div class="section-heading"><div><h2>写下来，也想清楚</h2><p>关于技术、工作，以及一路走来逐渐清晰的判断。</p></div><a href={url('/notes')} class="text-link">全部文章 <span aria-hidden="true">↗</span></a></div>
     <div class="reading-list">{notes.map(note => <NoteCard note={note} headingLevel="h3" />)}</div>
   </section>
   <div class="site-container home-contact"><ContactCTA /></div>

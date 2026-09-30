@@ -33,8 +33,9 @@ class Page(HTMLParser):
             self.current.append(attrs.get('href'))
 
 
-files = sorted(DIST.rglob('*.html'))
-assert len(files) == 13, f'Expected 13 content pages, got {len(files)}'
+files = sorted(DIST.rglob('index.html'))
+expected = 5 + sum(len(list((ROOT / 'src/content' / name).glob('*.mdx'))) for name in ['projects', 'notes'])
+assert len(files) == expected, f'Expected {expected} content pages, got {len(files)}'
 pages = {file: Page(file.read_text()) for file in files}
 links_checked = 0
 for file, page in pages.items():
